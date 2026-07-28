@@ -7,12 +7,15 @@ import { Category, Ingredient, Inquiry, Blog, Testimonial, FAQ, SiteSettings } f
 const seedData = async () => {
   console.log('🌱 Starting database seeding process...');
 
-  const passwordHashAdmin = await bcrypt.hash('123456', 10);
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@cosmalac.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'CosmalacPremium2026!';
+
+  const passwordHashAdmin = await bcrypt.hash(adminPassword, 10);
   const passwordHashEditor = await bcrypt.hash('CosmalacEditor2026!', 10);
   const passwordHashViewer = await bcrypt.hash('CosmalacViewer2026!', 10);
 
   const users = [
-    { email: 'mathuppriyan@gmail.com', passwordHash: passwordHashAdmin, role: 'SuperAdmin' },
+    { email: adminEmail, passwordHash: passwordHashAdmin, role: 'SuperAdmin' },
     { email: 'editor@cosmalac.com', passwordHash: passwordHashEditor, role: 'Editor' },
     { email: 'viewer@cosmalac.com', passwordHash: passwordHashViewer, role: 'Viewer' }
   ];

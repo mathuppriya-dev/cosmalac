@@ -50,9 +50,9 @@ Create a `.env` file under the `/backend` directory:
 ```env
 PORT=5000
 NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/cosmalac   # Set to 'mock' to use local mock_db.json instead!
-JWT_SECRET=cosmalac_super_secret_key_2026!
-JWT_REFRESH_SECRET=cosmalac_refresh_secret_key_2026!
+MONGO_URI=mongodb://localhost:27017/cosmalac   # Set to 'mock' to use local mock_db.json instead
+JWT_SECRET=your_jwt_access_secret_key
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
 EMAIL_PROVIDER=mock                            # SMTP/SendGrid options available
 ```
 
@@ -70,8 +70,8 @@ npm run dev
 ```
 
 ### 4. Default Seeded Admin Credentials
-Use the credentials below to log in to the admin panel at `/admin/login`:
-* **Super Admin**: `mathuppriyan@gmail.com` / `123456`
+Seeded admin credentials can be customized in the seeder script at `backend/src/scripts/seed.ts` before seeding:
+* **Super Admin**: `your_custom_email@example.com` / `your_custom_password`
 * **Editor**: `editor@cosmalac.com` / `CosmalacEditor2026!`
 * **Viewer**: `viewer@cosmalac.com` / `CosmalacViewer2026!`
 
