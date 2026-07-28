@@ -50,9 +50,9 @@ Create a `.env` file under the `/backend` directory:
 ```env
 PORT=5000
 NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/cosmalac   # Set to 'mock' to use local mock_db.json instead!
-JWT_SECRET=cosmalac_super_secret_key_2026!
-JWT_REFRESH_SECRET=cosmalac_refresh_secret_key_2026!
+MONGO_URI=your_mongodb_connection_string  # Set to 'mock' to use local mock_db.json instead!
+JWT_SECRET=your_jwt_secret
+JWT_REFRESH_SECRET=your_refresh_token_secret
 EMAIL_PROVIDER=mock                            # SMTP/SendGrid options available
 ```
 
@@ -71,9 +71,8 @@ npm run dev
 
 ### 4. Default Seeded Admin Credentials
 Use the credentials below to log in to the admin panel at `/admin/login`:
-* **Super Admin**: `mathuppriyan@gmail.com` / `123456`
-* **Editor**: `editor@cosmalac.com` / `CosmalacEditor2026!`
-* **Viewer**: `viewer@cosmalac.com` / `CosmalacViewer2026!`
+Default admin accounts are created through the seed script.
+Update the credentials according to your local development environment.
 
 ### 5. Accessing Swagger API Documentation
 Open your browser and navigate to:
