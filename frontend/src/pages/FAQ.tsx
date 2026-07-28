@@ -68,32 +68,32 @@ export const FAQ = () => {
         description="Find answers to questions about Cosmalac products, whitening cream ingredients, international wholesale shipping, and clinic partnerships."
       />
 
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 font-body">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 font-body">
         {/* Header */}
-        <div class="text-center space-y-3">
-          <HelpCircle class="text-rose-gold mx-auto" size={40} />
-          <h1 class="text-4xl font-extrabold text-text-primary font-heading">Support Center & FAQs</h1>
-          <p class="text-sm text-text-secondary leading-relaxed max-w-lg mx-auto">
+        <div className="text-center space-y-3">
+          <HelpCircle className="text-rose-gold mx-auto" size={40} />
+          <h1 className="text-4xl font-extrabold text-text-primary font-heading">Support Center & FAQs</h1>
+          <p className="text-sm text-text-secondary leading-relaxed max-w-lg mx-auto">
             Find answers to commonly asked questions regarding formulation safety, ingredient science, wholesale contracts, and clinic distributorships.
           </p>
         </div>
 
         {/* Filters and Search */}
-        <div class="space-y-4">
+        <div className="space-y-4">
           {/* Search bar */}
-          <div class="relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={16} />
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={16} />
             <input
               type="text"
               placeholder="Search support database..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              class="w-full pl-10 pr-4 py-2.5 bg-white border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold placeholder:text-muted"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold placeholder:text-muted"
             />
           </div>
 
           {/* Category Filters */}
-          <div class="flex flex-wrap gap-2 justify-center">
+          <div className="flex flex-wrap gap-2 justify-center">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
@@ -101,7 +101,7 @@ export const FAQ = () => {
                   setSelectedCat(cat);
                   setFaqOpenIdx(null);
                 }}
-                class={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors ${
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors ${
                   selectedCat === cat
                     ? 'bg-rose-gold text-white'
                     : 'bg-white border border-border-pink/60 text-text-secondary hover:text-text-primary hover:bg-bg-secondary'
@@ -115,37 +115,37 @@ export const FAQ = () => {
 
         {/* Accordions */}
         {isLoading ? (
-          <div class="space-y-4 animate-pulse">
+          <div className="space-y-4 animate-pulse">
             {[...Array(3)].map((_, i) => (
-              <div key={i} class="h-12 bg-white border border-border-pink rounded-xl" />
+              <div key={i} className="h-12 bg-white border border-border-pink rounded-xl" />
             ))}
           </div>
         ) : filteredFaqs.length === 0 ? (
-          <div class="text-center py-12 text-sm text-text-secondary">
+          <div className="text-center py-12 text-sm text-text-secondary">
             No FAQ articles match your search criteria.
           </div>
         ) : (
-          <div class="space-y-4 text-left">
+          <div className="space-y-4 text-left">
             {filteredFaqs.map((faq: any, idx: number) => (
-              <div key={idx} class="border border-border-pink bg-white rounded-xl overflow-hidden shadow-sm">
+              <div key={idx} className="border border-border-pink bg-white rounded-xl overflow-hidden shadow-sm">
                 <button
                   onClick={() => toggleFaq(idx)}
-                  class="w-full px-5 py-4.5 flex items-center justify-between text-left font-medium text-sm text-text-primary hover:bg-bg-secondary/40 transition-colors"
+                  className="w-full px-5 py-4.5 flex items-center justify-between text-left font-medium text-sm text-text-primary hover:bg-bg-secondary/40 transition-colors"
                 >
-                  <span class="pr-4">{faq.question}</span>
+                  <span className="pr-4">{faq.question}</span>
                   <ChevronDown
                     size={16}
-                    class={`text-text-secondary flex-shrink-0 transition-transform duration-300 ${
+                    className={`text-text-secondary flex-shrink-0 transition-transform duration-300 ${
                       faqOpenIdx === idx ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
                 <div
-                  class={`transition-all duration-300 overflow-hidden ${
+                  className={`transition-all duration-300 overflow-hidden ${
                     faqOpenIdx === idx ? 'max-h-60 border-t border-border-pink' : 'max-h-0'
                   }`}
                 >
-                  <p class="p-5 text-xs text-text-secondary leading-relaxed bg-bg-primary/20">
+                  <p className="p-5 text-xs text-text-secondary leading-relaxed bg-bg-primary/20">
                     {faq.answer}
                   </p>
                 </div>

@@ -28,31 +28,31 @@ export const AdminLayout = () => {
     <>
       <SEO title="Control Center Dashboard" description="Admin administration dashboard panel." />
 
-      <div class="min-h-screen bg-bg-primary/50 flex font-body">
+      <div className="min-h-screen bg-bg-primary/50 flex font-body">
         {/* Sidebar */}
-        <aside class="w-64 bg-white border-r border-border-pink flex flex-col justify-between flex-shrink-0 text-left">
-          <div class="p-6 space-y-8">
+        <aside className="w-64 bg-white border-r border-border-pink flex flex-col justify-between flex-shrink-0 text-left">
+          <div className="p-6 space-y-8">
             {/* Logo */}
-            <Link to="/" class="flex flex-col">
-              <span class="text-xl font-bold tracking-widest text-text-primary font-heading">
+            <Link to="/" className="flex flex-col">
+              <span className="text-xl font-bold tracking-widest text-text-primary font-heading">
                 COSMALAC
               </span>
-              <span class="text-[8px] tracking-[0.3em] uppercase text-text-secondary -mt-1 font-body">
+              <span className="text-[8px] tracking-[0.3em] uppercase text-text-secondary -mt-1 font-body">
                 Control Panel
               </span>
             </Link>
 
             {/* Profile Info */}
-            <div class="p-4 bg-bg-secondary/60 rounded-2xl border border-border-pink/40 space-y-1">
-              <p class="text-[10px] text-muted uppercase font-bold tracking-wide">Connected</p>
-              <p class="text-xs font-semibold text-text-primary truncate">{adminEmail}</p>
-              <span class="px-2 py-0.5 bg-rose-gold text-white text-[9px] font-bold uppercase rounded-full inline-block">
+            <div className="p-4 bg-bg-secondary/60 rounded-2xl border border-border-pink/40 space-y-1">
+              <p className="text-[10px] text-muted uppercase font-bold tracking-wide">Connected</p>
+              <p className="text-xs font-semibold text-text-primary truncate">{adminEmail}</p>
+              <span className="px-2 py-0.5 bg-rose-gold text-white text-[9px] font-bold uppercase rounded-full inline-block">
                 {adminRole}
               </span>
             </div>
 
             {/* Menus */}
-            <nav class="space-y-1.5">
+            <nav className="space-y-1.5">
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
@@ -60,7 +60,7 @@ export const AdminLayout = () => {
                   <Link
                     key={item.name}
                     to={item.path}
-                    class={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                       isActive
                         ? 'bg-rose-gold text-white shadow-sm'
                         : 'text-text-secondary hover:bg-bg-secondary hover:text-text-primary'
@@ -75,24 +75,24 @@ export const AdminLayout = () => {
           </div>
 
           {/* Footer Action */}
-          <div class="p-6 border-t border-border-pink/60 space-y-4">
+          <div className="p-6 border-t border-border-pink/60 space-y-4">
             <button
               onClick={handleLogout}
-              class="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl text-xs font-semibold tracking-wide transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl text-xs font-semibold tracking-wide transition-colors"
             >
               <LogOut size={16} />
               Log Out Session
             </button>
             
-            <p class="text-[9px] text-text-secondary text-center flex items-center justify-center gap-1">
-              COSMALAC CMS v1.0 <Heart size={8} class="text-rose-gold fill-rose-gold" />
+            <p className="text-[9px] text-text-secondary text-center flex items-center justify-center gap-1">
+              COSMALAC CMS v1.0 <Heart size={8} className="text-rose-gold fill-rose-gold" />
             </p>
           </div>
         </aside>
 
         {/* Content Box */}
-        <main class="flex-grow p-8 overflow-y-auto">
-          <div class="max-w-6xl mx-auto">
+        <main className="flex-grow p-8 overflow-y-auto">
+          <div className="max-w-6xl mx-auto">
             <Outlet />
           </div>
         </main>

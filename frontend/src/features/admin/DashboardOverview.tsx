@@ -40,75 +40,75 @@ export const DashboardOverview = () => {
   });
 
   if (isLoading) {
-    return <div class="text-center py-20 text-text-secondary">Loading statistics...</div>;
+    return <div className="text-center py-20 text-text-secondary">Loading statistics...</div>;
   }
 
   const counts = stats?.counts || MOCK_STATS.counts;
   const recentActivity = stats?.recentActivity || MOCK_STATS.recentActivity;
 
   return (
-    <div class="space-y-8 font-body text-left">
+    <div className="space-y-8 font-body text-left">
       {/* Header Title */}
       <div>
-        <h1 class="text-3xl font-bold font-heading text-text-primary">Dashboard</h1>
-        <p class="text-xs text-text-secondary">Real-time overview of catalogs, active trade leads, and scientific blog publishing metrics.</p>
+        <h1 className="text-3xl font-bold font-heading text-text-primary">Dashboard</h1>
+        <p className="text-xs text-text-secondary">Real-time overview of catalogs, active trade leads, and scientific blog publishing metrics.</p>
       </div>
 
       {/* Counters Grid */}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Products */}
-        <div class="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Active Catalog</span>
-            <p class="text-2xl font-bold text-text-primary">{counts.products}</p>
+        <div className="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Active Catalog</span>
+            <p className="text-2xl font-bold text-text-primary">{counts.products}</p>
           </div>
-          <div class="p-3 bg-brand-primary/20 text-rose-gold rounded-full">
+          <div className="p-3 bg-brand-primary/20 text-rose-gold rounded-full">
             <ShoppingBag size={20} />
           </div>
         </div>
 
         {/* Total Inquiries */}
-        <div class="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Total Inquiries</span>
-            <p class="text-2xl font-bold text-text-primary">{counts.inquiries}</p>
+        <div className="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Total Inquiries</span>
+            <p className="text-2xl font-bold text-text-primary">{counts.inquiries}</p>
           </div>
-          <div class="p-3 bg-brand-primary/20 text-rose-gold rounded-full">
+          <div className="p-3 bg-brand-primary/20 text-rose-gold rounded-full">
             <Mail size={20} />
           </div>
         </div>
 
         {/* New B2B Requests */}
-        <div class="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-text-secondary">B2B Trade leads</span>
-            <p class="text-2xl font-bold text-text-primary">{counts.b2bInquiries}</p>
+        <div className="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">B2B Trade leads</span>
+            <p className="text-2xl font-bold text-text-primary">{counts.b2bInquiries}</p>
           </div>
-          <div class="p-3 bg-green-50 text-green-600 rounded-full">
+          <div className="p-3 bg-green-50 text-green-600 rounded-full">
             <CheckCircle2 size={20} />
           </div>
         </div>
 
         {/* Science Blogs */}
-        <div class="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Publications</span>
-            <p class="text-2xl font-bold text-text-primary">{counts.blogs}</p>
+        <div className="bg-white border border-border-pink p-5 rounded-2xl flex items-center justify-between shadow-sm">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Publications</span>
+            <p className="text-2xl font-bold text-text-primary">{counts.blogs}</p>
           </div>
-          <div class="p-3 bg-brand-primary/20 text-rose-gold rounded-full">
+          <div className="p-3 bg-brand-primary/20 text-rose-gold rounded-full">
             <BookOpen size={20} />
           </div>
         </div>
       </div>
 
       {/* Chart Section */}
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Lead Graph */}
-        <div class="lg:col-span-2 bg-white border border-border-pink rounded-3xl p-6 shadow-sm space-y-4">
-          <h3 class="text-sm font-bold uppercase tracking-wider text-text-primary font-heading">
+        <div className="lg:col-span-2 bg-white border border-border-pink rounded-3xl p-6 shadow-sm space-y-4">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-text-primary font-heading">
             Lead Inflow Trend
           </h3>
-          <div class="h-64 w-full text-xs">
+          <div className="h-64 w-full text-xs">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={MOCK_CHART_DATA} margin={{ top: 5, right: 10, left: -25, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1DCE3" />
@@ -122,29 +122,29 @@ export const DashboardOverview = () => {
         </div>
 
         {/* Recent Activity Log */}
-        <div class="bg-white border border-border-pink rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-white border border-border-pink rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
           <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider text-text-primary font-heading mb-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-primary font-heading mb-4">
               Audit activity logs
             </h3>
-            <div class="space-y-4 overflow-y-auto max-h-56 pr-2">
+            <div className="space-y-4 overflow-y-auto max-h-56 pr-2">
               {recentActivity.map((act: any) => (
-                <div key={act.id} class="flex items-start gap-3 text-xs">
+                <div key={act.id} className="flex items-start gap-3 text-xs">
                   {act.type === 'inquiry' ? (
-                    <Clock class="text-rose-gold mt-0.5 flex-shrink-0" size={14} />
+                    <Clock className="text-rose-gold mt-0.5 flex-shrink-0" size={14} />
                   ) : (
-                    <FileText class="text-accent-gold mt-0.5 flex-shrink-0" size={14} />
+                    <FileText className="text-accent-gold mt-0.5 flex-shrink-0" size={14} />
                   )}
-                  <div class="space-y-0.5">
-                    <p class="font-bold text-text-primary">{act.title}</p>
-                    <p class="text-[11px] text-text-secondary leading-relaxed">{act.detail}</p>
+                  <div className="space-y-0.5">
+                    <p className="font-bold text-text-primary">{act.title}</p>
+                    <p className="text-[11px] text-text-secondary leading-relaxed">{act.detail}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div class="text-[10px] text-muted text-center pt-3 border-t border-border-pink/40">
+          <div className="text-[10px] text-muted text-center pt-3 border-t border-border-pink/40">
             System fully synchronized. Secure JWT session active.
           </div>
         </div>

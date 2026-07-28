@@ -45,18 +45,18 @@ export const BlogPost = () => {
 
   if (isLoading) {
     return (
-      <div class="max-w-7xl mx-auto px-4 py-20 flex justify-center items-center">
-        <div class="w-12 h-12 border-4 border-rose-gold border-t-transparent rounded-full animate-spin" />
+      <div className="max-w-7xl mx-auto px-4 py-20 flex justify-center items-center">
+        <div className="w-12 h-12 border-4 border-rose-gold border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (isError || !blog) {
     return (
-      <div class="max-w-xl mx-auto px-4 py-20 text-center space-y-4 font-body">
-        <h2 class="text-2xl font-bold font-heading text-text-primary">Article Not Found</h2>
-        <p class="text-sm text-text-secondary">The scientific publication you requested is unavailable.</p>
-        <Link to="/blog" class="inline-flex items-center gap-1 text-sm text-rose-gold font-semibold uppercase tracking-wider">
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4 font-body">
+        <h2 className="text-2xl font-bold font-heading text-text-primary">Article Not Found</h2>
+        <p className="text-sm text-text-secondary">The scientific publication you requested is unavailable.</p>
+        <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-rose-gold font-semibold uppercase tracking-wider">
           <ArrowLeft size={14} /> Back to Publications
         </Link>
       </div>
@@ -97,63 +97,63 @@ export const BlogPost = () => {
         schema={breadcrumbSchema}
       />
 
-      <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 font-body text-left">
+      <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 font-body text-left">
         {/* Breadcrumbs visually */}
-        <nav class="flex items-center space-x-1.5 text-xs text-text-secondary mb-6 font-medium">
-          <Link to="/" class="hover:text-rose-gold">Home</Link>
+        <nav className="flex items-center space-x-1.5 text-xs text-text-secondary mb-6 font-medium">
+          <Link to="/" className="hover:text-rose-gold">Home</Link>
           <ChevronRight size={12} />
-          <Link to="/blog" class="hover:text-rose-gold">Science Blog</Link>
+          <Link to="/blog" className="hover:text-rose-gold">Science Blog</Link>
           <ChevronRight size={12} />
-          <span class="text-text-primary truncate max-w-[200px]">{blog.title}</span>
+          <span className="text-text-primary truncate max-w-[200px]">{blog.title}</span>
         </nav>
 
         {/* Back Link */}
         <Link
           to="/blog"
-          class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-rose-gold transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-rose-gold transition-colors"
         >
           <ArrowLeft size={14} /> Back to Publications
         </Link>
 
         {/* Article Meta */}
-        <div class="space-y-4">
-          <div class="flex flex-wrap gap-1.5">
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-1.5">
             {blog.tags?.map((tag: string) => (
-              <span key={tag} class="px-2.5 py-0.5 bg-brand-primary/10 border border-border-pink/40 text-[10px] uppercase font-bold text-rose-gold rounded">
+              <span key={tag} className="px-2.5 py-0.5 bg-brand-primary/10 border border-border-pink/40 text-[10px] uppercase font-bold text-rose-gold rounded">
                 {tag}
               </span>
             ))}
           </div>
 
-          <h1 class="text-3xl sm:text-4xl font-bold font-heading text-text-primary leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-heading text-text-primary leading-tight">
             {blog.title}
           </h1>
 
-          <div class="flex flex-wrap items-center gap-6 text-xs text-text-secondary pt-2 border-b border-border-pink/40 pb-4">
-            <span class="flex items-center gap-1.5">
-              <User size={13} class="text-rose-gold" /> {blog.author}
+          <div className="flex flex-wrap items-center gap-6 text-xs text-text-secondary pt-2 border-b border-border-pink/40 pb-4">
+            <span className="flex items-center gap-1.5">
+              <User size={13} className="text-rose-gold" /> {blog.author}
             </span>
-            <span class="flex items-center gap-1.5">
-              <Calendar size={13} class="text-rose-gold" /> {new Date(blog.publishedAt).toLocaleDateString()}
+            <span className="flex items-center gap-1.5">
+              <Calendar size={13} className="text-rose-gold" /> {new Date(blog.publishedAt).toLocaleDateString()}
             </span>
-            <span class="flex items-center gap-1.5">
-              <Clock size={13} class="text-rose-gold" /> 5 min read
+            <span className="flex items-center gap-1.5">
+              <Clock size={13} className="text-rose-gold" /> 5 min read
             </span>
           </div>
         </div>
 
         {/* Banner Image */}
-        <div class="aspect-video w-full rounded-3xl bg-bg-secondary border border-border-pink overflow-hidden shadow-sm flex items-center justify-center">
+        <div className="aspect-video w-full rounded-3xl bg-bg-secondary border border-border-pink overflow-hidden shadow-sm flex items-center justify-center">
           <img
             src={blog.bannerImage || '/images/blog-placeholder.jpg'}
             alt={blog.title}
-            class="w-full h-full object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
 
         {/* HTML Rich Text Content */}
         <div
-          class="prose prose-pink max-w-none text-sm text-text-secondary leading-relaxed space-y-4
+          className="prose prose-pink max-w-none text-sm text-text-secondary leading-relaxed space-y-4
             prose-headings:text-text-primary prose-headings:font-bold prose-headings:font-heading
             prose-h3:text-lg prose-h3:pt-4 prose-p:leading-relaxed prose-strong:text-text-primary"
           dangerouslySetInnerHTML={{ __html: blog.content }}

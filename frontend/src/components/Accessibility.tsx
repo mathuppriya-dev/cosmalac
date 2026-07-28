@@ -5,7 +5,7 @@ export const SkipLink = () => {
   return (
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-gold focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-rose-gold transition-all duration-300"
+      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-gold focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-rose-gold transition-all duration-300"
     >
       Skip to main content
     </a>

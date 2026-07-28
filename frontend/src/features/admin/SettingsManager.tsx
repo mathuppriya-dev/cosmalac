@@ -87,145 +87,145 @@ export const SettingsManager = () => {
   };
 
   return (
-    <div class="space-y-6 font-body text-left max-w-2xl">
+    <div className="space-y-6 font-body text-left max-w-2xl">
       <div>
-        <h1 class="text-2xl font-bold font-heading text-text-primary">CMS Settings</h1>
-        <p class="text-xs text-text-secondary font-body">Manage global metadata, trade support emails, shipping addresses, and social handles.</p>
+        <h1 className="text-2xl font-bold font-heading text-text-primary">CMS Settings</h1>
+        <p className="text-xs text-text-secondary font-body">Manage global metadata, trade support emails, shipping addresses, and social handles.</p>
       </div>
 
       {isLoading ? (
-        <div class="text-xs text-text-secondary">Loading configurations...</div>
+        <div className="text-xs text-text-secondary">Loading configurations...</div>
       ) : (
-        <form onSubmit={handleSubmit} class="bg-white border border-border-pink rounded-3xl p-6 md:p-8 shadow-sm space-y-6 text-xs">
+        <form onSubmit={handleSubmit} className="bg-white border border-border-pink rounded-3xl p-6 md:p-8 shadow-sm space-y-6 text-xs">
           {success && (
-            <div class="p-3 bg-green-50 border border-green-200 text-green-600 rounded-xl flex items-center gap-2 font-semibold">
+            <div className="p-3 bg-green-50 border border-green-200 text-green-600 rounded-xl flex items-center gap-2 font-semibold">
               <Check size={14} /> Site settings updated successfully.
             </div>
           )}
 
           {/* Core Metadata */}
-          <div class="space-y-4">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border-pink/40 pb-2">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border-pink/40 pb-2">
               Branding Metadata
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Company Name</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Company Name</label>
                 <input
                   type="text"
                   required
                   value={form.siteName}
                   onChange={(e) => setForm({ ...form, siteName: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Brand Tagline</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Brand Tagline</label>
                 <input
                   type="text"
                   required
                   value={form.tagline}
                   onChange={(e) => setForm({ ...form, tagline: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
             </div>
           </div>
 
           {/* Contact Details */}
-          <div class="space-y-4">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border-pink/40 pb-2">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border-pink/40 pb-2">
               Communication channels
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Support Email</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Support Email</label>
                 <input
                   type="email"
                   required
                   value={form.contactEmail}
                   onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Support Phone</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Support Phone</label>
                 <input
                   type="text"
                   required
                   value={form.contactPhone}
                   onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">GMP Plant Address</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">GMP Plant Address</label>
                 <input
                   type="text"
                   required
                   value={form.address}
                   onChange={(e) => setForm({ ...form, address: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Business Hours</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Business Hours</label>
                 <input
                   type="text"
                   required
                   value={form.businessHours}
                   onChange={(e) => setForm({ ...form, businessHours: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
             </div>
           </div>
 
           {/* Social Profiles */}
-          <div class="space-y-4">
-            <h3 class="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border-pink/40 pb-2">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border-pink/40 pb-2">
               Social networks links
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Facebook URL</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Facebook URL</label>
                 <input
                   type="url"
                   value={form.facebook}
                   onChange={(e) => setForm({ ...form, facebook: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Instagram URL</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">Instagram URL</label>
                 <input
                   type="url"
                   value={form.instagram}
                   onChange={(e) => setForm({ ...form, instagram: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
               <div>
-                <label class="block font-semibold uppercase tracking-wider text-text-secondary mb-1">LinkedIn URL</label>
+                <label className="block font-semibold uppercase tracking-wider text-text-secondary mb-1">LinkedIn URL</label>
                 <input
                   type="url"
                   value={form.linkedin}
                   onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl focus:outline-none focus:border-rose-gold bg-bg-primary/20"
                 />
               </div>
             </div>
           </div>
 
-          <div class="flex justify-end pt-4 border-t border-border-pink/40">
+          <div className="flex justify-end pt-4 border-t border-border-pink/40">
             <button
               type="submit"
               disabled={updateMutation.isPending}
-              class="px-8 py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold disabled:bg-muted transition-colors flex items-center gap-2"
+              className="px-8 py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold disabled:bg-muted transition-colors flex items-center gap-2"
             >
-              {updateMutation.isPending ? <Loader2 size={12} class="animate-spin" /> : <Save size={12} />}
+              {updateMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
               Save Site Config
             </button>
           </div>

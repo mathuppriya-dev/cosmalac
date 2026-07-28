@@ -55,18 +55,18 @@ export const ProductDetails = () => {
 
   if (isLoading) {
     return (
-      <div class="max-w-7xl mx-auto px-4 py-20 flex justify-center items-center">
-        <div class="w-12 h-12 border-4 border-rose-gold border-t-transparent rounded-full animate-spin" />
+      <div className="max-w-7xl mx-auto px-4 py-20 flex justify-center items-center">
+        <div className="w-12 h-12 border-4 border-rose-gold border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (isError || !product) {
     return (
-      <div class="max-w-xl mx-auto px-4 py-20 text-center space-y-4 font-body">
-        <h2 class="text-2xl font-bold font-heading text-text-primary">Formulation Not Found</h2>
-        <p class="text-sm text-text-secondary">We could not retrieve the details for this formulation.</p>
-        <Link to="/products" class="inline-flex items-center gap-1 text-sm text-rose-gold font-semibold uppercase tracking-wider">
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4 font-body">
+        <h2 className="text-2xl font-bold font-heading text-text-primary">Formulation Not Found</h2>
+        <p className="text-sm text-text-secondary">We could not retrieve the details for this formulation.</p>
+        <Link to="/products" className="inline-flex items-center gap-1 text-sm text-rose-gold font-semibold uppercase tracking-wider">
           <ArrowLeft size={14} /> Back to Catalog
         </Link>
       </div>
@@ -97,46 +97,46 @@ export const ProductDetails = () => {
         schema={productSchema}
       />
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 font-body">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 font-body">
         {/* Back Link */}
         <Link
           to="/products"
-          class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-rose-gold transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-rose-gold transition-colors"
         >
           <ArrowLeft size={14} /> Back to Formulations
         </Link>
 
         {/* Dual Column Layout */}
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Image Gallery */}
-          <div class="lg:col-span-5 bg-white border border-border-pink rounded-3xl p-8 aspect-square flex items-center justify-center shadow-sm">
+          <div className="lg:col-span-5 bg-white border border-border-pink rounded-3xl p-8 aspect-square flex items-center justify-center shadow-sm">
             <img
               src={imageUrl}
               alt={product.title}
-              class="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300"
+              className="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300"
             />
           </div>
 
           {/* Right Column: Specifications & Forms */}
-          <div class="lg:col-span-7 space-y-6 text-left">
-            <div class="space-y-3">
-              <span class="px-3 py-1 bg-brand-primary/20 border border-brand-primary/40 rounded-full text-xs font-semibold uppercase tracking-wider text-rose-gold inline-block">
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <div className="space-y-3">
+              <span className="px-3 py-1 bg-brand-primary/20 border border-brand-primary/40 rounded-full text-xs font-semibold uppercase tracking-wider text-rose-gold inline-block">
                 {product.category}
               </span>
-              <h1 class="text-3xl sm:text-4xl font-bold text-text-primary font-heading">
+              <h1 className="text-3xl sm:text-4xl font-bold text-text-primary font-heading">
                 {product.title}
               </h1>
             </div>
 
-            <p class="text-sm sm:text-base text-text-secondary leading-relaxed">
+            <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
               {product.description}
             </p>
 
             {/* Tabs Controller */}
-            <div class="border-b border-border-pink flex space-x-6 text-xs uppercase tracking-wider font-semibold">
+            <div className="border-b border-border-pink flex space-x-6 text-xs uppercase tracking-wider font-semibold">
               <button
                 onClick={() => setActiveTab('ingredients')}
-                class={`pb-3 transition-colors ${
+                className={`pb-3 transition-colors ${
                   activeTab === 'ingredients' ? 'border-b-2 border-rose-gold text-rose-gold' : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
@@ -144,7 +144,7 @@ export const ProductDetails = () => {
               </button>
               <button
                 onClick={() => setActiveTab('usage')}
-                class={`pb-3 transition-colors ${
+                className={`pb-3 transition-colors ${
                   activeTab === 'usage' ? 'border-b-2 border-rose-gold text-rose-gold' : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
@@ -152,7 +152,7 @@ export const ProductDetails = () => {
               </button>
               <button
                 onClick={() => setActiveTab('specs')}
-                class={`pb-3 transition-colors ${
+                className={`pb-3 transition-colors ${
                   activeTab === 'specs' ? 'border-b-2 border-rose-gold text-rose-gold' : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
@@ -161,37 +161,37 @@ export const ProductDetails = () => {
             </div>
 
             {/* Tab Contents */}
-            <div class="min-h-[150px] bg-white border border-border-pink p-6 rounded-2xl shadow-sm text-sm text-text-secondary leading-relaxed">
+            <div className="min-h-[150px] bg-white border border-border-pink p-6 rounded-2xl shadow-sm text-sm text-text-secondary leading-relaxed">
               {activeTab === 'ingredients' && (
-                <div class="space-y-4">
-                  <div class="flex items-center gap-1.5 text-text-primary font-semibold">
-                    <Sparkles size={16} class="text-rose-gold" /> Active Ingredients Glossary
+                <div className="space-y-4">
+                  <div className="flex items-center gap-1.5 text-text-primary font-semibold">
+                    <Sparkles size={16} className="text-rose-gold" /> Active Ingredients Glossary
                   </div>
-                  <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {product.ingredients?.map((ing: string, i: number) => (
-                      <li key={i} class="flex items-center gap-2 text-xs">
-                        <Check size={14} class="text-rose-gold flex-shrink-0" /> {ing}
+                      <li key={i} className="flex items-center gap-2 text-xs">
+                        <Check size={14} className="text-rose-gold flex-shrink-0" /> {ing}
                       </li>
                     ))}
                   </ul>
-                  <p class="text-[11px] leading-relaxed text-muted pt-2 border-t border-border-pink/40">
+                  <p className="text-[11px] leading-relaxed text-muted pt-2 border-t border-border-pink/40">
                     Formulated at precise clinical thresholds. Check our Quality standards page to learn about skin tolerability protocols.
                   </p>
                 </div>
               )}
 
               {activeTab === 'usage' && (
-                <div class="space-y-4">
-                  <div class="flex items-center gap-1.5 text-text-primary font-semibold">
-                    <Info size={16} class="text-rose-gold" /> Directions for Use
+                <div className="space-y-4">
+                  <div className="flex items-center gap-1.5 text-text-primary font-semibold">
+                    <Info size={16} className="text-rose-gold" /> Directions for Use
                   </div>
-                  <p class="text-xs leading-relaxed">{product.directions}</p>
+                  <p className="text-xs leading-relaxed">{product.directions}</p>
                   
                   {product.warnings && (
-                    <div class="p-3 bg-red-50/50 border border-red-100 rounded-lg text-xs flex gap-2 items-start text-red-700">
-                      <ShieldAlert size={16} class="flex-shrink-0 mt-0.5" />
+                    <div className="p-3 bg-red-50/50 border border-red-100 rounded-lg text-xs flex gap-2 items-start text-red-700">
+                      <ShieldAlert size={16} className="flex-shrink-0 mt-0.5" />
                       <div>
-                        <strong class="block font-semibold">Cautionary Advisory</strong>
+                        <strong className="block font-semibold">Cautionary Advisory</strong>
                         {product.warnings}
                       </div>
                     </div>
@@ -200,18 +200,18 @@ export const ProductDetails = () => {
               )}
 
               {activeTab === 'specs' && (
-                <div class="space-y-4">
-                  <div class="flex items-center gap-1.5 text-text-primary font-semibold">
-                    <Box size={16} class="text-rose-gold" /> Packaging & Storage Specs
+                <div className="space-y-4">
+                  <div className="flex items-center gap-1.5 text-text-primary font-semibold">
+                    <Box size={16} className="text-rose-gold" /> Packaging & Storage Specs
                   </div>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                     <div>
-                      <span class="block text-[10px] uppercase font-bold text-muted mb-0.5">Primary Container</span>
-                      <p class="text-text-primary">{product.packaging || 'Airless luxury pump / Frosted glass jar'}</p>
+                      <span className="block text-[10px] uppercase font-bold text-muted mb-0.5">Primary Container</span>
+                      <p className="text-text-primary">{product.packaging || 'Airless luxury pump / Frosted glass jar'}</p>
                     </div>
                     <div>
-                      <span class="block text-[10px] uppercase font-bold text-muted mb-0.5">Storage Instruction</span>
-                      <p class="text-text-primary">{product.storage || 'Keep in cool dry cupboard'}</p>
+                      <span className="block text-[10px] uppercase font-bold text-muted mb-0.5">Storage Instruction</span>
+                      <p className="text-text-primary">{product.storage || 'Keep in cool dry cupboard'}</p>
                     </div>
                   </div>
                 </div>
@@ -219,10 +219,10 @@ export const ProductDetails = () => {
             </div>
 
             {/* CTAs */}
-            <div class="pt-4 flex gap-4">
+            <div className="pt-4 flex gap-4">
               <button
                 onClick={() => setInquiryOpen(true)}
-                class="px-8 py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold transition-colors duration-300 shadow-sm flex items-center gap-2 group"
+                className="px-8 py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold transition-colors duration-300 shadow-sm flex items-center gap-2 group"
               >
                 <Send size={12} /> Inquire About Formulation
               </button>

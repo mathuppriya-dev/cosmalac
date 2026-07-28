@@ -94,37 +94,37 @@ export const Products = () => {
         description="Browse the complete Cosmalac medical skincare catalog. Brightening creams, hydrating serums, cleansers, and toners formulated for optimal efficacy."
       />
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* ================= HEADER ================= */}
-        <div class="text-center max-w-xl mx-auto space-y-3">
-          <span class="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Professional Skincare</span>
-          <h1 class="text-4xl font-extrabold text-text-primary font-heading">Our Formulations</h1>
-          <p class="text-sm text-text-secondary leading-relaxed font-body">
+        <div className="text-center max-w-xl mx-auto space-y-3">
+          <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Professional Skincare</span>
+          <h1 className="text-4xl font-extrabold text-text-primary font-heading">Our Formulations</h1>
+          <p className="text-sm text-text-secondary leading-relaxed font-body">
             Each formulation is crafted in clinical laboratories using high-potency ingredients like Alpha Arbutin, Niacinamide, and Botanical complexes.
           </p>
         </div>
 
         {/* ================= CONTROLS ROW (Search, Filter, Sort) ================= */}
-        <div class="bg-white border border-border-pink/60 rounded-3xl p-6 shadow-sm space-y-6 font-body">
+        <div className="bg-white border border-border-pink/60 rounded-3xl p-6 shadow-sm space-y-6 font-body">
           {/* Top Row: Search & Sort */}
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="relative flex-grow max-w-md">
-              <Search class="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary" size={16} />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="relative flex-grow max-w-md">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary" size={16} />
               <input
                 type="text"
                 placeholder="Search formulations by name or active ingredients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                class="w-full pl-10 pr-4 py-2.5 bg-bg-primary/20 border border-border-pink/70 rounded-full text-sm focus:outline-none focus:border-rose-gold placeholder:text-muted"
+                className="w-full pl-10 pr-4 py-2.5 bg-bg-primary/20 border border-border-pink/70 rounded-full text-sm focus:outline-none focus:border-rose-gold placeholder:text-muted"
               />
             </div>
             
-            <div class="flex items-center gap-2 self-end">
-              <SlidersHorizontal size={14} class="text-text-secondary" />
+            <div className="flex items-center gap-2 self-end">
+              <SlidersHorizontal size={14} className="text-text-secondary" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                class="bg-bg-primary/20 border border-border-pink/70 px-4 py-2.5 rounded-full text-xs font-medium text-text-secondary focus:outline-none focus:border-rose-gold"
+                className="bg-bg-primary/20 border border-border-pink/70 px-4 py-2.5 rounded-full text-xs font-medium text-text-secondary focus:outline-none focus:border-rose-gold"
               >
                 <option value="newest">Sort: Newest First</option>
                 <option value="name-asc">Sort: Name (A - Z)</option>
@@ -134,13 +134,13 @@ export const Products = () => {
           </div>
 
           {/* Bottom Row: Category Tabs */}
-          <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-            <Grid size={13} class="text-text-secondary flex-shrink-0" />
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+            <Grid size={13} className="text-text-secondary flex-shrink-0" />
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCat(cat)}
-                class={`px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors flex-shrink-0 ${
+                className={`px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors flex-shrink-0 ${
                   selectedCat === cat
                     ? 'bg-rose-gold text-white shadow-sm'
                     : 'bg-bg-primary/40 border border-border-pink/30 text-text-secondary hover:text-text-primary hover:bg-brand-primary/10'
@@ -154,25 +154,25 @@ export const Products = () => {
 
         {/* ================= PRODUCT GRID LIST ================= */}
         {isLoading ? (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, i) => (
-              <div key={i} class="bg-white rounded-2xl aspect-square border border-border-pink animate-pulse" />
+              <div key={i} className="bg-white rounded-2xl aspect-square border border-border-pink animate-pulse" />
             ))}
           </div>
         ) : isError && filteredProducts.length === 0 ? (
-          <div class="p-12 text-center bg-white border border-border-pink rounded-3xl space-y-3 font-body max-w-md mx-auto">
-            <AlertCircle class="text-rose-gold mx-auto" size={40} />
-            <h3 class="text-lg font-bold text-text-primary">Error Connecting</h3>
-            <p class="text-xs text-text-secondary leading-relaxed">
+          <div className="p-12 text-center bg-white border border-border-pink rounded-3xl space-y-3 font-body max-w-md mx-auto">
+            <AlertCircle className="text-rose-gold mx-auto" size={40} />
+            <h3 className="text-lg font-bold text-text-primary">Error Connecting</h3>
+            <p className="text-xs text-text-secondary leading-relaxed">
               We encountered an issue retrieving the catalog from our cloud database.
             </p>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div class="py-20 text-center font-body">
-            <p class="text-sm text-text-secondary">No formulations found matching your filter selection.</p>
+          <div className="py-20 text-center font-body">
+            <p className="text-sm text-text-secondary">No formulations found matching your filter selection.</p>
           </div>
         ) : (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map((product: any) => (
               <ProductCard key={product.id || product._id} product={product} />
             ))}

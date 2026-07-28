@@ -33,30 +33,30 @@ export const Navbar = () => {
 
   return (
     <header
-      class={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         scrolled ? 'glass-nav py-3 shadow-sm' : 'bg-transparent py-5'
       }`}
     >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link to="/" class="flex flex-col group">
-          <span class="text-2xl font-bold tracking-widest text-text-primary font-heading group-hover:text-rose-gold transition-colors duration-300">
+        <Link to="/" className="flex flex-col group">
+          <span className="text-2xl font-bold tracking-widest text-text-primary font-heading group-hover:text-rose-gold transition-colors duration-300">
             COSMALAC
           </span>
-          <span class="text-[9px] tracking-[0.3em] uppercase text-text-secondary -mt-1 font-body">
+          <span className="text-[9px] tracking-[0.3em] uppercase text-text-secondary -mt-1 font-body">
             Est. 2016
           </span>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav class="hidden md:flex space-x-8 items-center">
+        <nav className="hidden md:flex space-x-8 items-center">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
             return (
               <Link
                 key={link.name}
                 to={link.path}
-                class={`text-sm font-medium tracking-wide transition-all duration-300 hover:text-rose-gold font-body relative py-1 ${
+                className={`text-sm font-medium tracking-wide transition-all duration-300 hover:text-rose-gold font-body relative py-1 ${
                   isActive ? 'text-rose-gold' : 'text-text-secondary'
                 }`}
               >
@@ -64,7 +64,7 @@ export const Navbar = () => {
                 {isActive && (
                   <motion.span
                     layoutId="activeNavIndicator"
-                    class="absolute bottom-0 left-0 right-0 h-[1.5px] bg-rose-gold"
+                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-rose-gold"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -74,10 +74,10 @@ export const Navbar = () => {
         </nav>
 
         {/* Right CTA / Admin Login */}
-        <div class="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-4">
           <Link
             to="/admin"
-            class="p-2 text-text-secondary hover:text-rose-gold transition-colors duration-300"
+            className="p-2 text-text-secondary hover:text-rose-gold transition-colors duration-300"
             title="Admin Dashboard"
             aria-label="Admin Dashboard"
           >
@@ -86,25 +86,25 @@ export const Navbar = () => {
           
           <Link
             to="/contact"
-            class="px-5 py-2.5 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-all duration-300 shadow-sm hover:shadow flex items-center gap-2 group"
+            className="px-5 py-2.5 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-all duration-300 shadow-sm hover:shadow flex items-center gap-2 group"
           >
             Inquire Now
-            <ArrowRight size={13} class="group-hover:translate-x-1 transition-transform duration-300" />
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
           </Link>
         </div>
 
         {/* Mobile Toggle Button */}
-        <div class="md:hidden flex items-center gap-3">
+        <div className="md:hidden flex items-center gap-3">
           <Link
             to="/admin"
-            class="p-2 text-text-secondary hover:text-rose-gold"
+            className="p-2 text-text-secondary hover:text-rose-gold"
             aria-label="Admin Dashboard"
           >
             <User size={18} />
           </Link>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            class="p-2 text-text-primary focus:outline-none"
+            className="p-2 text-text-primary focus:outline-none"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -120,16 +120,16 @@ export const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            class="md:hidden bg-bg-secondary/95 border-b border-border-pink backdrop-blur-md overflow-hidden"
+            className="md:hidden bg-bg-secondary/95 border-b border-border-pink backdrop-blur-md overflow-hidden"
           >
-            <div class="px-4 pt-2 pb-6 space-y-3">
+            <div className="px-4 pt-2 pb-6 space-y-3">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
                     key={link.name}
                     to={link.path}
-                    class={`block px-3 py-2 rounded-lg text-base font-medium tracking-wide transition-colors ${
+                    className={`block px-3 py-2 rounded-lg text-base font-medium tracking-wide transition-colors ${
                       isActive
                         ? 'bg-brand-primary/20 text-rose-gold'
                         : 'text-text-secondary hover:bg-brand-primary/10 hover:text-text-primary'
@@ -139,10 +139,10 @@ export const Navbar = () => {
                   </Link>
                 );
               })}
-              <div class="pt-4 border-t border-border-pink">
+              <div className="pt-4 border-t border-border-pink">
                 <Link
                   to="/contact"
-                  class="w-full text-center block py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors duration-300"
+                  className="w-full text-center block py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors duration-300"
                 >
                   Inquire Now
                 </Link>

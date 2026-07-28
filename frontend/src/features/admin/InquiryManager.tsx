@@ -74,67 +74,67 @@ export const InquiryManager = () => {
   };
 
   return (
-    <div class="space-y-6 font-body text-left">
+    <div className="space-y-6 font-body text-left">
       <div>
-        <h1 class="text-2xl font-bold font-heading text-text-primary">Contact & Distributor Leads</h1>
-        <p class="text-xs text-text-secondary font-body">Review submitted contact forms and B2B distributor applications.</p>
+        <h1 className="text-2xl font-bold font-heading text-text-primary">Contact & Distributor Leads</h1>
+        <p className="text-xs text-text-secondary font-body">Review submitted contact forms and B2B distributor applications.</p>
       </div>
 
       {/* Inquiry List Table */}
       {isLoading ? (
-        <div class="text-xs text-text-secondary">Loading leads...</div>
+        <div className="text-xs text-text-secondary">Loading leads...</div>
       ) : (
-        <div class="bg-white border border-border-pink rounded-2xl overflow-hidden shadow-sm">
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left border-collapse">
+        <div className="bg-white border border-border-pink rounded-2xl overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr class="bg-bg-secondary border-b border-border-pink text-text-primary uppercase tracking-wider font-bold">
-                  <th class="p-4">Date</th>
-                  <th class="p-4">Sender</th>
-                  <th class="p-4">Type</th>
-                  <th class="p-4">Company</th>
-                  <th class="p-4 text-center">Status</th>
+                <tr className="bg-bg-secondary border-b border-border-pink text-text-primary uppercase tracking-wider font-bold">
+                  <th className="p-4">Date</th>
+                  <th className="p-4">Sender</th>
+                  <th className="p-4">Type</th>
+                  <th className="p-4">Company</th>
+                  <th className="p-4 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-border-pink/40">
+              <tbody className="divide-y divide-border-pink/40">
                 {inquiries.map((inq: any) => (
                   <tr
                     key={inq.id || inq._id}
                     onClick={() => handleRowClick(inq)}
-                    class="hover:bg-bg-primary/20 cursor-pointer transition-colors"
+                    className="hover:bg-bg-primary/20 cursor-pointer transition-colors"
                   >
-                    <td class="p-4 text-text-secondary">
+                    <td className="p-4 text-text-secondary">
                       {new Date(inq.createdAt).toLocaleDateString()}
                     </td>
-                    <td class="p-4">
-                      <p class="font-semibold text-text-primary">{inq.name}</p>
-                      <p class="text-[10px] text-text-secondary">{inq.email}</p>
+                    <td className="p-4">
+                      <p className="font-semibold text-text-primary">{inq.name}</p>
+                      <p className="text-[10px] text-text-secondary">{inq.email}</p>
                     </td>
-                    <td class="p-4">
+                    <td className="p-4">
                       {inq.type === 'Distributor' ? (
-                        <span class="px-2 py-0.5 bg-rose-gold text-white font-bold uppercase rounded text-[9px] inline-flex items-center gap-0.5">
+                        <span className="px-2 py-0.5 bg-rose-gold text-white font-bold uppercase rounded text-[9px] inline-flex items-center gap-0.5">
                           <Award size={8} /> B2B Trade
                         </span>
                       ) : (
-                        <span class="px-2 py-0.5 bg-bg-secondary border border-border-pink text-text-secondary font-bold uppercase rounded text-[9px]">
+                        <span className="px-2 py-0.5 bg-bg-secondary border border-border-pink text-text-secondary font-bold uppercase rounded text-[9px]">
                           B2C Client
                         </span>
                       )}
                     </td>
-                    <td class="p-4 text-text-secondary italic">{inq.company || '—'}</td>
-                    <td class="p-4 text-center">
+                    <td className="p-4 text-text-secondary italic">{inq.company || '—'}</td>
+                    <td className="p-4 text-center">
                       {inq.status === 'New' && (
-                        <span class="px-2 py-0.5 bg-red-50 border border-red-200 text-red-600 rounded-full font-bold uppercase text-[9px]">
+                        <span className="px-2 py-0.5 bg-red-50 border border-red-200 text-red-600 rounded-full font-bold uppercase text-[9px]">
                           New
                         </span>
                       )}
                       {inq.status === 'In Progress' && (
-                        <span class="px-2 py-0.5 bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-full font-bold uppercase text-[9px]">
+                        <span className="px-2 py-0.5 bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-full font-bold uppercase text-[9px]">
                           In Progress
                         </span>
                       )}
                       {inq.status === 'Resolved' && (
-                        <span class="px-2 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded-full font-bold uppercase text-[9px]">
+                        <span className="px-2 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded-full font-bold uppercase text-[9px]">
                           Resolved
                         </span>
                       )}
@@ -149,42 +149,42 @@ export const InquiryManager = () => {
 
       {/* Inquiry Detail Modal */}
       {selectedInquiry && (
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div class="fixed inset-0 bg-[#2D2D2D]/35 backdrop-blur-sm" onClick={() => setSelectedInquiry(null)} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="fixed inset-0 bg-[#2D2D2D]/35 backdrop-blur-sm" onClick={() => setSelectedInquiry(null)} />
           
-          <div class="bg-white border border-border-pink rounded-3xl p-6 md:p-8 max-w-lg w-full relative z-10 shadow-2xl space-y-5">
+          <div className="bg-white border border-border-pink rounded-3xl p-6 md:p-8 max-w-lg w-full relative z-10 shadow-2xl space-y-5">
             <button
               onClick={() => setSelectedInquiry(null)}
-              class="absolute top-4 right-4 p-2 text-text-secondary hover:text-text-primary rounded-full hover:bg-bg-secondary"
+              className="absolute top-4 right-4 p-2 text-text-secondary hover:text-text-primary rounded-full hover:bg-bg-secondary"
             >
               <X size={18} />
             </button>
 
             {/* Header info */}
-            <div class="space-y-1.5 pb-3 border-b border-border-pink/40">
-              <div class="flex items-center gap-2">
-                <span class="text-xs font-bold uppercase tracking-wider text-rose-gold">Inquiry Details</span>
-                <span class="text-[10px] text-text-secondary">| Received: {new Date(selectedInquiry.createdAt).toLocaleString()}</span>
+            <div className="space-y-1.5 pb-3 border-b border-border-pink/40">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-rose-gold">Inquiry Details</span>
+                <span className="text-[10px] text-text-secondary">| Received: {new Date(selectedInquiry.createdAt).toLocaleString()}</span>
               </div>
-              <h2 class="text-xl font-bold font-heading text-text-primary">{selectedInquiry.name}</h2>
-              <p class="text-xs text-text-secondary">{selectedInquiry.email} • {selectedInquiry.phone}</p>
+              <h2 className="text-xl font-bold font-heading text-text-primary">{selectedInquiry.name}</h2>
+              <p className="text-xs text-text-secondary">{selectedInquiry.email} • {selectedInquiry.phone}</p>
             </div>
 
             {/* Message Body */}
-            <div class="space-y-1 bg-bg-primary/20 p-4 rounded-xl border border-border-pink/30 text-xs">
-              <span class="block text-[9px] uppercase font-bold text-muted mb-0.5">Submitted Message</span>
-              <p class="text-text-secondary leading-relaxed whitespace-pre-wrap">{selectedInquiry.message}</p>
+            <div className="space-y-1 bg-bg-primary/20 p-4 rounded-xl border border-border-pink/30 text-xs">
+              <span className="block text-[9px] uppercase font-bold text-muted mb-0.5">Submitted Message</span>
+              <p className="text-text-secondary leading-relaxed whitespace-pre-wrap">{selectedInquiry.message}</p>
             </div>
 
             {/* Admin Audit & Status editor */}
-            <div class="space-y-4 pt-2">
-              <div class="grid grid-cols-2 gap-4">
+            <div className="space-y-4 pt-2">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Status</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Status</label>
                   <select
                     value={statusVal}
                     onChange={(e) => setStatusVal(e.target.value as any)}
-                    class="w-full text-xs px-3 py-2 border border-border-pink rounded-xl bg-white focus:outline-none focus:border-rose-gold font-semibold"
+                    className="w-full text-xs px-3 py-2 border border-border-pink rounded-xl bg-white focus:outline-none focus:border-rose-gold font-semibold"
                   >
                     <option value="New">New Lead</option>
                     <option value="In Progress">In Progress</option>
@@ -192,31 +192,31 @@ export const InquiryManager = () => {
                   </select>
                 </div>
                 <div>
-                  <label class="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Sender Type</label>
-                  <div class="py-2 px-3 bg-bg-secondary border border-border-pink/60 rounded-xl text-xs font-semibold text-text-primary text-center uppercase tracking-wide">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Sender Type</label>
+                  <div className="py-2 px-3 bg-bg-secondary border border-border-pink/60 rounded-xl text-xs font-semibold text-text-primary text-center uppercase tracking-wide">
                     {selectedInquiry.type}
                   </div>
                 </div>
               </div>
 
               <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Private Trade Notes</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Private Trade Notes</label>
                 <textarea
                   rows={3}
                   value={noteText}
                   onChange={(e) => setNoteText(e.target.value)}
                   placeholder="Record call logs, sample dispatches, or catalog agreements..."
-                  class="w-full px-4 py-2 border border-border-pink rounded-xl text-xs focus:outline-none focus:border-rose-gold bg-bg-primary/20 resize-none"
+                  className="w-full px-4 py-2 border border-border-pink rounded-xl text-xs focus:outline-none focus:border-rose-gold bg-bg-primary/20 resize-none"
                 />
               </div>
             </div>
 
             {/* Actions */}
-            <div class="flex items-center justify-end gap-3 pt-2 border-t border-border-pink/40">
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-pink/40">
               <button
                 type="button"
                 onClick={() => setSelectedInquiry(null)}
-                class="px-5 py-2 bg-bg-secondary text-text-secondary text-xs rounded-full hover:text-text-primary transition-colors"
+                className="px-5 py-2 bg-bg-secondary text-text-secondary text-xs rounded-full hover:text-text-primary transition-colors"
               >
                 Cancel
               </button>
@@ -224,9 +224,9 @@ export const InquiryManager = () => {
                 type="button"
                 onClick={handleSave}
                 disabled={updateMutation.isPending}
-                class="px-6 py-2 bg-text-primary text-bg-primary text-xs font-bold uppercase rounded-full hover:bg-rose-gold disabled:bg-muted transition-colors flex items-center gap-1.5"
+                className="px-6 py-2 bg-text-primary text-bg-primary text-xs font-bold uppercase rounded-full hover:bg-rose-gold disabled:bg-muted transition-colors flex items-center gap-1.5"
               >
-                {updateMutation.isPending ? <Loader2 size={12} class="animate-spin" /> : 'Save Changes'}
+                {updateMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : 'Save Changes'}
               </button>
             </div>
           </div>

@@ -75,9 +75,9 @@ export const App = () => {
           <Route
             path="/*"
             element={
-              <div class="flex flex-col min-h-screen">
+              <div className="flex flex-col min-h-screen">
                 <Navbar />
-                <main id="main-content" class="flex-grow pt-20">
+                <main id="main-content" className="flex-grow pt-20">
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/products" element={<Products />} />
