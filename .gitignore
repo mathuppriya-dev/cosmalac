@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+.env
+.env*.local
+uploads/
+mock_db.json
+*.log
+.DS_Store
+Thumbs.db
