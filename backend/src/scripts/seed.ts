@@ -21,10 +21,10 @@ const seedData = async () => {
   ];
 
   const categories = [
-    { name: 'Creams', description: 'Premium facial moisturizing and whitening creams' },
-    { name: 'Serums', description: 'Concentrated science-backed skin serums' },
-    { name: 'Cleansers', description: 'Gentle clarifying face washes' },
-    { name: 'Toners', description: 'Rebalancing and hydrating toners' }
+    { name: 'Creams', slug: 'creams', description: 'Premium facial moisturizing and whitening creams' },
+    { name: 'Serums', slug: 'serums', description: 'Concentrated science-backed skin serums' },
+    { name: 'Cleansers', slug: 'cleansers', description: 'Gentle clarifying face washes' },
+    { name: 'Toners', slug: 'toners', description: 'Rebalancing and hydrating toners' }
   ];
 
   const ingredients = [
@@ -194,7 +194,7 @@ const seedData = async () => {
   if (isMockDB) {
     const data = readMockData();
     data.users = users.map((u, i) => ({ id: `user_${i}`, ...u, createdAt: new Date().toISOString() }));
-    data.categories = categories.map((c, i) => ({ id: `cat_${i}`, slug: c.name.toLowerCase(), ...c }));
+    data.categories = categories.map((c, i) => ({ id: `cat_${i}`, ...c }));
     data.ingredients = ingredients.map((ing, i) => ({ id: `ing_${i}`, ...ing }));
     data.products = products.map((p, i) => ({ id: `prod_${i}`, ...p, createdAt: new Date().toISOString() }));
     data.testimonials = testimonials.map((t, i) => ({ id: `test_${i}`, ...t }));

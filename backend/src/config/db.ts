@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export let isMockDB = false;
 const MOCK_FILE_PATH = path.join(__dirname, '../../mock_db.json');
