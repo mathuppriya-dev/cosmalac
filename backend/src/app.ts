@@ -14,6 +14,7 @@ import productRoutes from './routes/productRoutes';
 import inquiryRoutes from './routes/inquiryRoutes';
 import blogRoutes from './routes/blogRoutes';
 import cmsRoutes from './routes/cmsRoutes';
+import mediaRoutes from './routes/mediaRoutes';
 import { apiLimiter } from './middlewares/rateLimiter';
 import { swaggerSpec } from './config/swagger';
 import logger from './utils/logger';
@@ -65,7 +66,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', apiLimiter);
 
 // Static uploads folder for local files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.resolve(__dirname, '../../frontend/public/uploads')));
 
 // Routes mapping
 app.use('/api/auth', authRoutes);
@@ -73,6 +74,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/cms', cmsRoutes);
+app.use('/api/media', mediaRoutes);
 
 // Advanced Monitoring Endpoint
 app.get('/api/health', (req, res) => {
