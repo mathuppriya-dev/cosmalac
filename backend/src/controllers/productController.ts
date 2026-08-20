@@ -2,12 +2,14 @@ import { Request, Response } from 'express';
 import { dbService } from '../services/dbService';
 
 export const getProducts = async (req: Request, res: Response) => {
-  const { category, search, isFeatured, isBestseller } = req.query;
+  const { category, search, isFeatured, isBestseller, status, isAdmin } = req.query;
 
   try {
     const filter: any = {};
     if (category) filter.category = category as string;
     if (search) filter.search = search as string;
+    if (status) filter.status = status as string;
+    if (isAdmin !== undefined) filter.isAdmin = isAdmin === 'true';
     if (isFeatured !== undefined) filter.isFeatured = isFeatured === 'true';
     if (isBestseller !== undefined) filter.isBestseller = isBestseller === 'true';
 
@@ -41,6 +43,9 @@ export const createProduct = async (req: Request, res: Response) => {
   try {
     const files = req.files as Express.Multer.File[];
     let images: string[] = req.body.images || [];
+    if (typeof images === 'string') {
+      images = [images];
+    }
 
     if (files && files.length > 0) {
       const filePaths = files.map(f => `/uploads/${f.filename}`);
@@ -50,9 +55,12 @@ export const createProduct = async (req: Request, res: Response) => {
     const productData = {
       ...req.body,
       images,
+      status: req.body.status || 'active',
       isFeatured: req.body.isFeatured === 'true' || req.body.isFeatured === true,
       isBestseller: req.body.isBestseller === 'true' || req.body.isBestseller === true,
-      ingredients: Array.isArray(req.body.ingredients) ? req.body.ingredients : (req.body.ingredients ? req.body.ingredients.split(',').map((s: string) => s.trim()) : [])
+      price: req.body.price ? Number(req.body.price) : undefined,
+      ingredients: Array.isArray(req.body.ingredients) ? req.body.ingredients : (req.body.ingredients ? req.body.ingredients.split(',').map((s: string) => s.trim()).filter(Boolean) : []),
+      benefits: Array.isArray(req.body.benefits) ? req.body.benefits : (req.body.benefits ? req.body.benefits.split(',').map((s: string) => s.trim()).filter(Boolean) : [])
     };
 
     const newProduct = await dbService.createProduct(productData);
@@ -81,9 +89,12 @@ export const updateProduct = async (req: Request, res: Response) => {
     const productData = {
       ...req.body,
       images,
+      status: req.body.status || 'active',
       isFeatured: req.body.isFeatured === 'true' || req.body.isFeatured === true,
       isBestseller: req.body.isBestseller === 'true' || req.body.isBestseller === true,
-      ingredients: Array.isArray(req.body.ingredients) ? req.body.ingredients : (req.body.ingredients ? req.body.ingredients.split(',').map((s: string) => s.trim()) : [])
+      price: req.body.price !== undefined && req.body.price !== '' ? Number(req.body.price) : undefined,
+      ingredients: Array.isArray(req.body.ingredients) ? req.body.ingredients : (req.body.ingredients ? req.body.ingredients.split(',').map((s: string) => s.trim()).filter(Boolean) : []),
+      benefits: Array.isArray(req.body.benefits) ? req.body.benefits : (req.body.benefits ? req.body.benefits.split(',').map((s: string) => s.trim()).filter(Boolean) : [])
     };
 
     const updated = await dbService.updateProduct(id, productData);
