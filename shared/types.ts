@@ -18,8 +18,12 @@ export interface Product {
   slug: string;
   description: string;
   shortDescription: string;
-  category: string; // Category ID or Name
-  ingredients: string[]; // Active ingredient IDs or text names
+  category: string;
+  size?: string;
+  price?: number;
+  status?: 'active' | 'draft' | 'archived';
+  ingredients: string[];
+  benefits?: string[];
   directions: string;
   warnings?: string;
   storage?: string;
@@ -28,6 +32,7 @@ export interface Product {
   isFeatured?: boolean;
   isBestseller?: boolean;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Ingredient {

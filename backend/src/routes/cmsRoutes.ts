@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { 
-  getTestimonials, createTestimonial, deleteTestimonial,
+  getCmsContent, updateCmsContent,
   getFAQs, createFAQ, deleteFAQ,
   getSettings, updateSettings,
   getDashboardStats 
@@ -9,21 +9,20 @@ import { authenticateJWT, requireRole } from '../middlewares/auth';
 
 const router = Router();
 
-// Testimonials (Public & Protected)
-router.get('/testimonials', getTestimonials);
-router.post('/testimonials', authenticateJWT, requireRole(['SuperAdmin', 'Admin', 'Editor']), createTestimonial);
-router.delete('/testimonials/:id', authenticateJWT, requireRole(['SuperAdmin', 'Admin']), deleteTestimonial);
+// Multilingual CMS Content (Vision, Mission, Values, Hero, Sections)
+router.get('/content', getCmsContent);
+router.put('/content', authenticateJWT, requireRole(['SuperAdmin', 'Editor']), updateCmsContent);
 
-// FAQs (Public & Protected)
+// FAQs
 router.get('/faqs', getFAQs);
-router.post('/faqs', authenticateJWT, requireRole(['SuperAdmin', 'Admin', 'Editor']), createFAQ);
-router.delete('/faqs/:id', authenticateJWT, requireRole(['SuperAdmin', 'Admin']), deleteFAQ);
+router.post('/faqs', authenticateJWT, requireRole(['SuperAdmin', 'Editor']), createFAQ);
+router.delete('/faqs/:id', authenticateJWT, requireRole(['SuperAdmin', 'Editor']), deleteFAQ);
 
-// Site Settings
+// Site Settings (WhatsApp, Contact Info, Social Links)
 router.get('/settings', getSettings);
-router.put('/settings', authenticateJWT, requireRole(['SuperAdmin', 'Admin']), updateSettings);
+router.put('/settings', authenticateJWT, requireRole(['SuperAdmin', 'Editor']), updateSettings);
 
-// Admin dashboard summary statistics
-router.get('/stats', authenticateJWT, requireRole(['SuperAdmin', 'Admin', 'Editor', 'Viewer']), getDashboardStats);
+// Admin dashboard summary statistics (Database-driven live telemetry)
+router.get('/stats', authenticateJWT, requireRole(['SuperAdmin', 'Editor', 'Viewer']), getDashboardStats);
 
 export default router;

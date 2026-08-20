@@ -38,8 +38,13 @@ export const dbService = {
     if (isMockDB) {
       const data = readMockData();
       let list = data.products || [];
+      if (filter.status) {
+        list = list.filter((p: any) => (p.status || 'active') === filter.status);
+      } else if (!filter.isAdmin) {
+        list = list.filter((p: any) => (p.status || 'active') === 'active');
+      }
       if (filter.category && filter.category !== 'All') {
-        list = list.filter((p: any) => p.category.toLowerCase() === filter.category.toLowerCase());
+        list = list.filter((p: any) => p.category?.toLowerCase() === filter.category.toLowerCase());
       }
       if (filter.isFeatured !== undefined) {
         list = list.filter((p: any) => p.isFeatured === filter.isFeatured);
@@ -49,12 +54,21 @@ export const dbService = {
       }
       if (filter.search) {
         const s = filter.search.toLowerCase();
-        list = list.filter((p: any) => p.title.toLowerCase().includes(s) || p.description.toLowerCase().includes(s));
+        list = list.filter((p: any) => 
+          p.title?.toLowerCase().includes(s) || 
+          p.description?.toLowerCase().includes(s) ||
+          (p.ingredients && Array.isArray(p.ingredients) && p.ingredients.some((ing: string) => ing.toLowerCase().includes(s)))
+        );
       }
       return list;
     }
     
     const query: any = {};
+    if (filter.status) {
+      query.status = filter.status;
+    } else if (!filter.isAdmin) {
+      query.status = { $ne: 'archived' };
+    }
     if (filter.category && filter.category !== 'All') {
       query.category = filter.category;
     }
@@ -67,7 +81,8 @@ export const dbService = {
     if (filter.search) {
       query.$or = [
         { title: { $regex: filter.search, $options: 'i' } },
-        { description: { $regex: filter.search, $options: 'i' } }
+        { description: { $regex: filter.search, $options: 'i' } },
+        { ingredients: { $in: [new RegExp(filter.search, 'i')] } }
       ];
     }
     const items = await Product.find(query).sort({ createdAt: -1 }).lean();
@@ -77,42 +92,61 @@ export const dbService = {
   async getProductById(id: string): Promise<any> {
     if (isMockDB) {
       const data = readMockData();
-      return data.products.find((p: any) => p.id === id);
+      const clean = id.toLowerCase().trim();
+      return (data.products || []).find((p: any) => 
+        (p.id && p.id.toLowerCase() === clean) || 
+        (p.slug && p.slug.toLowerCase() === clean) ||
+        (p.title && p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === clean)
+      );
     }
-    const item = await Product.findById(id).lean();
-    return item ? { ...item, id: item._id.toString() } : null;
+    try {
+      const item = await Product.findById(id).lean();
+      if (item) return { ...item, id: item._id.toString() };
+    } catch (e) {}
+    const bySlug = await Product.findOne({ $or: [{ slug: id }, { slug: id.toLowerCase() }] }).lean();
+    return bySlug ? { ...bySlug, id: bySlug._id.toString() } : null;
   },
 
   async getProductBySlug(slug: string): Promise<any> {
     if (isMockDB) {
       const data = readMockData();
-      return data.products.find((p: any) => p.slug === slug);
+      const clean = slug.toLowerCase().trim();
+      return (data.products || []).find((p: any) => 
+        (p.slug && p.slug.toLowerCase() === clean) || 
+        (p.id && p.id.toLowerCase() === clean) ||
+        (p.title && p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === clean)
+      );
     }
-    const item = await Product.findOne({ slug }).lean();
+    const clean = slug.toLowerCase().trim();
+    const item = await Product.findOne({ $or: [{ slug }, { slug: clean }] }).lean();
     return item ? { ...item, id: item._id.toString() } : null;
   },
 
   async createProduct(productData: any): Promise<any> {
     const slug = productData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const now = new Date().toISOString();
     if (isMockDB) {
       const data = readMockData();
       const newProduct = {
         id: generateId(),
         slug,
-        images: [],
+        images: productData.images || [],
+        status: productData.status || 'active',
         ...productData,
-        createdAt: new Date().toISOString()
+        createdAt: now,
+        updatedAt: now
       };
       data.products.push(newProduct);
       writeMockData(data);
       return newProduct;
     }
-    const product = new Product({ ...productData, slug });
+    const product = new Product({ ...productData, slug, status: productData.status || 'active' });
     await product.save();
     return product.toObject();
   },
 
   async updateProduct(id: string, productData: any): Promise<any> {
+    const now = new Date().toISOString();
     if (isMockDB) {
       const data = readMockData();
       const idx = data.products.findIndex((p: any) => p.id === id);
@@ -123,7 +157,8 @@ export const dbService = {
       data.products[idx] = {
         ...data.products[idx],
         ...productData,
-        slug
+        slug,
+        updatedAt: now
       };
       writeMockData(data);
       return data.products[idx];
@@ -392,13 +427,36 @@ export const dbService = {
 
   // ================= SETTINGS =================
   async getSettings(): Promise<any> {
+    const defaultSettings = {
+      siteName: 'Cosmalac',
+      tagline: 'EST. 2016',
+      contactEmail: 'info@cosmalac.com',
+      contactPhone: '+94 11 234 5678',
+      whatsAppNumber: '0779178371',
+      address: '123 Beauty Street, Colombo, Sri Lanka',
+      businessHours: 'Mon - Fri: 9:00 AM - 5:00 PM',
+      socialLinks: {
+        facebook: 'https://facebook.com/cosmalac',
+        instagram: 'https://instagram.com/cosmalac',
+        linkedin: 'https://linkedin.com/company/cosmalac'
+      }
+    };
+
     if (isMockDB) {
       const data = readMockData();
+      if (!data.settings) {
+        data.settings = defaultSettings;
+        writeMockData(data);
+      }
+      if (!data.settings.whatsAppNumber) {
+        data.settings.whatsAppNumber = '0779178371';
+        writeMockData(data);
+      }
       return data.settings;
     }
     let settings = await SiteSettings.findOne().lean();
     if (!settings) {
-      const newSettings = new SiteSettings();
+      const newSettings = new SiteSettings(defaultSettings);
       await newSettings.save();
       return newSettings.toObject();
     }

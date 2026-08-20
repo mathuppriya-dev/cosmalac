@@ -1,40 +1,22 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Mail, CheckCircle2, Clock, AlertCircle, X, ShieldAlert, Award, Loader2 } from 'lucide-react';
+import {
+  Mail,
+  X,
+  Award,
+  Loader2,
+  Trash2
+} from 'lucide-react';
 import axiosInstance from '../../lib/axios';
 
-const MOCK_INQUIRIES = [
-  {
-    id: 'inq_0',
-    name: 'Priya Perera',
-    email: 'priya@priyaspa.com',
-    phone: '+94 77 123 4567',
-    company: 'Serenity Spa Chain',
-    type: 'Distributor',
-    message: 'We are expanding to Colombo and would like to obtain wholesale price catalogs for the Cosmalac Glow Cream range.',
-    status: 'New',
-    notes: '',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'inq_1',
-    name: 'Sanjeewa Silva',
-    email: 'sanjeewa@gmail.com',
-    phone: '+94 71 987 6543',
-    company: '',
-    type: 'General',
-    message: 'Can I apply the Glow Cream along with vitamin C serums? Please advise if any conflicts occur.',
-    status: 'Resolved',
-    notes: 'Advised client via email to patch test first and apply Vitamin C in morning, Glow Cream in evening.',
-    createdAt: new Date().toISOString()
-  }
-];
+const STATUS_OPTIONS = ['New', 'Contacted', 'Qualified', 'Converted', 'Rejected'] as const;
 
 export const InquiryManager = () => {
   const queryClient = useQueryClient();
   const [selectedInquiry, setSelectedInquiry] = useState<any | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [noteText, setNoteText] = useState('');
-  const [statusVal, setStatusVal] = useState<'New' | 'In Progress' | 'Resolved'>('New');
+  const [statusVal, setStatusVal] = useState<string>('New');
 
   // Fetch Inquiries
   const { data: inquiries = [], isLoading } = useQuery({
@@ -42,15 +24,25 @@ export const InquiryManager = () => {
     queryFn: async () => {
       const res = await axiosInstance.get('/inquiries');
       return res.data;
-    },
-    retry: false,
-    initialData: MOCK_INQUIRIES
+    }
   });
 
-  // Update Inquiry Status Mutation
+  // Update Status Mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, status, notes }: { id: string; status: string; notes: string }) => {
       return await axiosInstance.put(`/inquiries/${id}`, { status, notes });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-inquiries-list'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-dashboard-stats'] });
+      setSelectedInquiry(null);
+    }
+  });
+
+  // Delete Mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await axiosInstance.delete(`/inquiries/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-inquiries-list'] });
@@ -60,11 +52,12 @@ export const InquiryManager = () => {
 
   const handleRowClick = (inq: any) => {
     setSelectedInquiry(inq);
-    setNoteText(inq.notes || '');
     setStatusVal(inq.status || 'New');
+    setNoteText(inq.notes || '');
   };
 
-  const handleSave = () => {
+  const handleSaveStatus = (e: React.FormEvent) => {
+    e.preventDefault();
     if (!selectedInquiry) return;
     updateMutation.mutate({
       id: selectedInquiry.id || selectedInquiry._id,
@@ -73,162 +66,264 @@ export const InquiryManager = () => {
     });
   };
 
+  const handleDelete = (id: string) => {
+    if (confirm('Are you sure you want to delete this lead record?')) {
+      deleteMutation.mutate(id);
+    }
+  };
+
+  const filteredInquiries = inquiries.filter((inq: any) => {
+    if (statusFilter === 'ALL') return true;
+    return (inq.status || 'New') === statusFilter;
+  });
+
   return (
     <div className="space-y-6 font-body text-left">
-      <div>
-        <h1 className="text-2xl font-bold font-heading text-text-primary">Contact & Distributor Leads</h1>
-        <p className="text-xs text-text-secondary font-body">Review submitted contact forms and B2B distributor applications.</p>
+      {/* Header & Filter Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#121110]">
+            B2B Trade Inquiries & Leads
+          </h1>
+          <p className="text-xs text-[#57534E] font-medium mt-1">
+            Manage wholesale applications, spa & clinic leads, and customer inquiries with status workflows.
+          </p>
+        </div>
+
+        {/* Filter Pills */}
+        <div className="flex items-center gap-1.5 p-1 bg-white rounded-2xl border border-[#D8D2C8] shadow-xs self-start sm:self-auto overflow-x-auto">
+          {['ALL', 'New', 'Contacted', 'Qualified', 'Converted', 'Rejected'].map((st) => (
+            <button
+              key={st}
+              onClick={() => setStatusFilter(st)}
+              className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-colors ${
+                statusFilter === st
+                  ? 'bg-[#121110] text-white'
+                  : 'text-[#57534E] hover:text-[#121110]'
+              }`}
+            >
+              {st}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Inquiry List Table */}
       {isLoading ? (
-        <div className="text-xs text-text-secondary">Loading leads...</div>
+        <div className="p-12 text-center text-xs text-[#57534E] bg-white rounded-3xl border border-[#D8D2C8]">
+          <Loader2 size={24} className="animate-spin text-rose-gold mx-auto mb-2" />
+          Loading leads and trade applications...
+        </div>
       ) : (
-        <div className="bg-white border border-border-pink rounded-2xl overflow-hidden shadow-sm">
+        <div className="bg-white border border-[#D8D2C8] rounded-3xl overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-bg-secondary border-b border-border-pink text-text-primary uppercase tracking-wider font-bold">
+                <tr className="bg-[#EBE7DC]/50 border-b border-[#D8D2C8] text-[#121110] uppercase tracking-wider font-bold">
                   <th className="p-4">Date</th>
-                  <th className="p-4">Sender</th>
-                  <th className="p-4">Type</th>
-                  <th className="p-4">Company</th>
+                  <th className="p-4">Contact / Company</th>
+                  <th className="p-4">Lead Type</th>
+                  <th className="p-4">Expected Volume</th>
                   <th className="p-4 text-center">Status</th>
+                  <th className="p-4 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border-pink/40">
-                {inquiries.map((inq: any) => (
-                  <tr
-                    key={inq.id || inq._id}
-                    onClick={() => handleRowClick(inq)}
-                    className="hover:bg-bg-primary/20 cursor-pointer transition-colors"
-                  >
-                    <td className="p-4 text-text-secondary">
-                      {new Date(inq.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="p-4">
-                      <p className="font-semibold text-text-primary">{inq.name}</p>
-                      <p className="text-[10px] text-text-secondary">{inq.email}</p>
-                    </td>
-                    <td className="p-4">
-                      {inq.type === 'Distributor' ? (
-                        <span className="px-2 py-0.5 bg-rose-gold text-white font-bold uppercase rounded text-[9px] inline-flex items-center gap-0.5">
-                          <Award size={8} /> B2B Trade
-                        </span>
-                      ) : (
-                        <span className="px-2 py-0.5 bg-bg-secondary border border-border-pink text-text-secondary font-bold uppercase rounded text-[9px]">
-                          B2C Client
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 text-text-secondary italic">{inq.company || '—'}</td>
-                    <td className="p-4 text-center">
-                      {inq.status === 'New' && (
-                        <span className="px-2 py-0.5 bg-red-50 border border-red-200 text-red-600 rounded-full font-bold uppercase text-[9px]">
-                          New
-                        </span>
-                      )}
-                      {inq.status === 'In Progress' && (
-                        <span className="px-2 py-0.5 bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-full font-bold uppercase text-[9px]">
-                          In Progress
-                        </span>
-                      )}
-                      {inq.status === 'Resolved' && (
-                        <span className="px-2 py-0.5 bg-green-50 border border-green-200 text-green-600 rounded-full font-bold uppercase text-[9px]">
-                          Resolved
-                        </span>
-                      )}
+              <tbody className="divide-y divide-[#D8D2C8]/60">
+                {filteredInquiries.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-10 text-center text-[#57534E] font-medium">
+                      No inquiries match the current filter.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredInquiries.map((inq: any) => (
+                    <tr
+                      key={inq.id || inq._id}
+                      onClick={() => handleRowClick(inq)}
+                      className="hover:bg-[#F1EFE7]/50 cursor-pointer transition-colors"
+                    >
+                      <td className="p-4 text-[#57534E] font-medium">
+                        {new Date(inq.createdAt || inq.date || Date.now()).toLocaleDateString()}
+                      </td>
+                      <td className="p-4">
+                        <p className="font-bold text-[#121110] text-sm">{inq.name}</p>
+                        <p className="text-[11px] text-[#57534E] font-medium">
+                          {inq.company ? `${inq.company} • ` : ''}{inq.email}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        {inq.type === 'Distributor' || inq.type === 'B2B Trade' ? (
+                          <span className="px-2.5 py-1 bg-rose-gold text-white font-bold uppercase rounded-lg text-[10px] inline-flex items-center gap-1 shadow-2xs">
+                            <Award size={10} /> {inq.businessType || 'B2B Trade'}
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-1 bg-[#F1EFE7] border border-[#D8D2C8] text-[#121110] font-bold uppercase rounded-lg text-[10px]">
+                            Customer
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-4 text-[#121110] font-bold">
+                        {inq.expectedVolume || 'Standard'}
+                      </td>
+                      <td className="p-4 text-center">
+                        <span
+                          className={`px-3 py-1 rounded-full font-bold uppercase text-[10px] tracking-wider inline-block ${
+                            inq.status === 'New'
+                              ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                              : inq.status === 'Contacted'
+                              ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                              : inq.status === 'Qualified'
+                              ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                              : inq.status === 'Converted'
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                              : 'bg-stone-100 text-stone-700 border border-stone-200'
+                          }`}
+                        >
+                          {inq.status || 'New'}
+                        </span>
+                      </td>
+                      <td className="p-4 text-center">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRowClick(inq);
+                          }}
+                          className="px-3.5 py-1.5 bg-[#121110] text-white rounded-xl text-[11px] font-bold hover:bg-rose-gold transition-colors shadow-2xs"
+                        >
+                          Inspect Lead
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
       )}
 
-      {/* Inquiry Detail Modal */}
+      {/* Inquiry Detail & Status Update Modal */}
       {selectedInquiry && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="fixed inset-0 bg-[#2D2D2D]/35 backdrop-blur-sm" onClick={() => setSelectedInquiry(null)} />
-          
-          <div className="bg-white border border-border-pink rounded-3xl p-6 md:p-8 max-w-lg w-full relative z-10 shadow-2xl space-y-5">
-            <button
-              onClick={() => setSelectedInquiry(null)}
-              className="absolute top-4 right-4 p-2 text-text-secondary hover:text-text-primary rounded-full hover:bg-bg-secondary"
-            >
-              <X size={18} />
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+            onClick={() => setSelectedInquiry(null)}
+          />
 
-            {/* Header info */}
-            <div className="space-y-1.5 pb-3 border-b border-border-pink/40">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-rose-gold">Inquiry Details</span>
-                <span className="text-[10px] text-text-secondary">| Received: {new Date(selectedInquiry.createdAt).toLocaleString()}</span>
+          <div className="bg-white border border-[#D8D2C8] rounded-3xl p-6 sm:p-8 max-w-lg w-full relative z-10 shadow-2xl space-y-5 text-xs text-left font-body">
+            <div className="flex items-center justify-between border-b border-[#D8D2C8] pb-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-rose-gold">
+                Lead Inspection Details
+              </span>
+              <button
+                onClick={() => setSelectedInquiry(null)}
+                className="p-1.5 text-[#57534E] hover:text-[#121110] rounded-lg hover:bg-bg-secondary"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-lg font-bold font-heading text-[#121110]">
+                  {selectedInquiry.name}
+                </h3>
+                <p className="text-xs text-[#57534E] font-medium">
+                  {selectedInquiry.company ? `${selectedInquiry.company} • ` : ''}
+                  {selectedInquiry.email} • {selectedInquiry.phone}
+                </p>
               </div>
-              <h2 className="text-xl font-bold font-heading text-text-primary">{selectedInquiry.name}</h2>
-              <p className="text-xs text-text-secondary">{selectedInquiry.email} • {selectedInquiry.phone}</p>
-            </div>
 
-            {/* Message Body */}
-            <div className="space-y-1 bg-bg-primary/20 p-4 rounded-xl border border-border-pink/30 text-xs">
-              <span className="block text-[9px] uppercase font-bold text-muted mb-0.5">Submitted Message</span>
-              <p className="text-text-secondary leading-relaxed whitespace-pre-wrap">{selectedInquiry.message}</p>
-            </div>
-
-            {/* Admin Audit & Status editor */}
-            <div className="space-y-4 pt-2">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-2 p-3 bg-[#F1EFE7]/50 rounded-2xl border border-[#D8D2C8]">
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Status</label>
-                  <select
-                    value={statusVal}
-                    onChange={(e) => setStatusVal(e.target.value as any)}
-                    className="w-full text-xs px-3 py-2 border border-border-pink rounded-xl bg-white focus:outline-none focus:border-rose-gold font-semibold"
-                  >
-                    <option value="New">New Lead</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
+                  <span className="text-[10px] uppercase font-bold text-[#57534E] block">Lead Category</span>
+                  <span className="font-bold text-[#121110]">{selectedInquiry.type || 'General'}</span>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Sender Type</label>
-                  <div className="py-2 px-3 bg-bg-secondary border border-border-pink/60 rounded-xl text-xs font-semibold text-text-primary text-center uppercase tracking-wide">
-                    {selectedInquiry.type}
-                  </div>
+                  <span className="text-[10px] uppercase font-bold text-[#57534E] block">Business Model</span>
+                  <span className="font-bold text-[#121110]">{selectedInquiry.businessType || 'Direct Retail'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-[#57534E] block">Expected Volume</span>
+                  <span className="font-bold text-[#121110]">{selectedInquiry.expectedVolume || 'Standard Order'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-[#57534E] block">Country</span>
+                  <span className="font-bold text-[#121110]">{selectedInquiry.country || 'Sri Lanka'}</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">Private Trade Notes</label>
-                <textarea
-                  rows={3}
-                  value={noteText}
-                  onChange={(e) => setNoteText(e.target.value)}
-                  placeholder="Record call logs, sample dispatches, or catalog agreements..."
-                  className="w-full px-4 py-2 border border-border-pink rounded-xl text-xs focus:outline-none focus:border-rose-gold bg-bg-primary/20 resize-none"
-                />
+                <span className="text-[10px] uppercase font-bold text-[#57534E] block mb-1">
+                  Message Content:
+                </span>
+                <div className="p-3.5 bg-[#F1EFE7]/40 border border-[#D8D2C8] rounded-xl text-xs text-[#121110] leading-relaxed font-medium">
+                  {selectedInquiry.message}
+                </div>
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center justify-end gap-3 pt-2 border-t border-border-pink/40">
-              <button
-                type="button"
-                onClick={() => setSelectedInquiry(null)}
-                className="px-5 py-2 bg-bg-secondary text-text-secondary text-xs rounded-full hover:text-text-primary transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={updateMutation.isPending}
-                className="px-6 py-2 bg-text-primary text-bg-primary text-xs font-bold uppercase rounded-full hover:bg-rose-gold disabled:bg-muted transition-colors flex items-center gap-1.5"
-              >
-                {updateMutation.isPending ? <Loader2 size={12} className="animate-spin" /> : 'Save Changes'}
-              </button>
-            </div>
+            {/* Status Update Form */}
+            <form onSubmit={handleSaveStatus} className="space-y-4 pt-2 border-t border-[#D8D2C8]">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
+                  Lead Workflow Stage
+                </label>
+                <select
+                  value={statusVal}
+                  onChange={(e) => setStatusVal(e.target.value)}
+                  className="w-full px-3.5 py-2.5 border border-[#D8D2C8] rounded-xl bg-white text-xs font-bold text-[#121110] focus:outline-none focus:border-rose-gold"
+                >
+                  {STATUS_OPTIONS.map((st) => (
+                    <option key={st} value={st}>
+                      {st}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
+                  Internal Administrative Notes
+                </label>
+                <textarea
+                  rows={2}
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  placeholder="e.g. Sent wholesale pricing tier via WhatsApp on Aug 20."
+                  className="w-full px-3.5 py-2.5 border border-[#D8D2C8] rounded-xl bg-white text-xs text-[#121110] font-medium focus:outline-none focus:border-rose-gold resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <button
+                  type="button"
+                  onClick={() => handleDelete(selectedInquiry.id || selectedInquiry._id)}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                  title="Delete Lead"
+                >
+                  <Trash2 size={16} />
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInquiry(null)}
+                    className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#57534E] hover:text-[#121110]"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={updateMutation.isPending}
+                    className="px-6 py-2.5 bg-[#121110] text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors shadow-2xs"
+                  >
+                    {updateMutation.isPending ? 'Updating...' : 'Save Status'}
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       )}

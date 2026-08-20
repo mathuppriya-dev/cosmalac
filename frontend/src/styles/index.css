@@ -2,8 +2,8 @@
 
 @theme {
   /* Brand Luxury Color Palette */
-  --color-bg-primary: #FFF9FB;
-  --color-bg-secondary: #FFF0F5;
+  --color-bg-primary: #F1EFE7;
+  --color-bg-secondary: #E9E5D9;
   --color-brand-primary: #F7C6D9;
   --color-brand-secondary: #F4B6C2;
   --color-blush-pink: #FADADD;
@@ -14,8 +14,9 @@
   --color-border-pink: #F1DCE3;
 
   /* Typography */
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-subheading: 'Cormorant Garamond', Georgia, serif;
+  --font-logo: 'Josefin Sans', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --font-subheading: 'Outfit', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
 
@@ -26,7 +27,7 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #FFF9FB;
+    background: #F1EFE7;
   }
   ::-webkit-scrollbar-thumb {
     background: #D8A7B1;
@@ -38,34 +39,55 @@
 
   /* Glassmorphism Classes */
   .glass-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(241, 220, 227, 0.6);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(241, 220, 227, 0.8);
   }
 
   .glass-nav {
-    background: rgba(255, 249, 251, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(241, 220, 227, 0.4);
+    background: rgba(241, 239, 231, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(216, 167, 177, 0.3);
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(241, 220, 227, 0.8);
   }
 }
 
 /* Reset and Global Styles */
 html {
   scroll-behavior: smooth;
+  background-color: #F1EFE7;
 }
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: #F1EFE7;
+  color: #2D2D2D;
   overflow-x: hidden;
+}
+
+.font-logo {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.font-heading {
+  font-family: 'Outfit', sans-serif;
+}
+
+.font-body {
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  color: #121110;
 }
 
 .subheading-text {

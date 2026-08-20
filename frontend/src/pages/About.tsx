@@ -1,133 +1,232 @@
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Calendar, Compass, Target, ShieldCheck, Heart } from 'lucide-react';
+import { Calendar, Compass, Target, ShieldCheck, Heart, Sparkles } from 'lucide-react';
+import axiosInstance from '../lib/axios';
 import { SEO } from '../components/SEO';
 
 const TIMELINE_MILESTONES = [
   {
     year: '2016',
-    title: 'Establishment of COSMALAC',
-    description: 'Founded with a clear focus on introducing pharmaceutical-grade active ingredients to daily cosmetics.'
+    title: 'Founding of COSMALAC',
+    description: 'Established with a vision to craft premium, clean beauty care and brightening creams for radiant skin.'
   },
   {
     year: '2019',
-    title: 'ISO & GMP Certifications',
-    description: 'Achieved ISO 22716 certification for Good Manufacturing Practices (GMP) in cosmetics production.'
+    title: 'Brand Growth & Formulations',
+    description: 'Expanded our beauty catalog with enriched botanical extracts and targeted cosmetic actives.'
   },
   {
     year: '2022',
-    title: 'Clinical Actives Launch',
-    description: 'Introduced our hyperpigmentation line featuring stable Alpha Arbutin and Niacinamide complexes.'
+    title: 'Signature Night Care Debut',
+    description: 'Introduced targeted brightening creams tailored for blemishes, dark spots, and nightly rejuvenation.'
   },
   {
     year: '2025',
-    title: 'Global Export Partnerships',
-    description: 'Began wholesale trade exports to beauty clinics and dermatological centers in South Asia and Europe.'
+    title: 'Retail & Wellness Partnerships',
+    description: 'Partnered with premier salons, spas, and distributor networks across regional markets.'
   }
 ];
 
 export const About = () => {
+  // Fetch dynamic CMS content from backend
+  const { data: cmsContent } = useQuery({
+    queryKey: ['public-cms-content'],
+    queryFn: async () => {
+      const res = await axiosInstance.get('/cms/content');
+      return res.data;
+    }
+  });
+
+  const visionText =
+    cmsContent?.vision?.en ||
+    'To become a global benchmark for clean, scientific skin brightening, proving that high-end beauty and clinical safety can coexist seamlessly.';
+
+  const missionText =
+    cmsContent?.mission?.en ||
+    'To formulate luxurious, skin-friendly beauty solutions that restore natural confidence, combining enriching botanical care with targeted cosmetic performance.';
+
   return (
     <>
       <SEO
-        title="Our Skincare Legacy"
-        description="Learn about the history of Cosmalac. Established in 2016, we formulate premium medical-grade skincare solutions backed by clinical R&D and clean manufacturing."
+        title="Our Story & Skincare Heritage | COSMALAC"
+        description="Discover the story of Cosmalac. Established in 2016, we create luxurious, nourishing skincare formulations designed to reveal your natural glow."
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 font-body">
-        {/* ================= 1. PREMIUM ABOUT HERO ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 text-left">
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold">Est. 2016</span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-text-primary font-heading leading-tight">
-              Pioneering Scientific <br />
-              <span className="text-rose-gold italic">Cosmetics</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24 font-body text-left bg-[#F1EFE7]">
+        {/* ================= 1. UNFRAMED NATURAL ABOUT HERO ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column: Typography */}
+          <motion.div
+            initial={{ opacity: 0, x: -35 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6 space-y-6"
+          >
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white border border-[#D8D2C8] rounded-full text-xs font-bold uppercase tracking-wider text-rose-gold shadow-2xs">
+              <Calendar size={12} /> Established 2016
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-[#121110] font-heading leading-tight">
+              Crafted for Your <br />
+              <span className="text-rose-gold italic">Natural Radiance</span>
             </h1>
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
-              Cosmalac was founded with a singular, scientific objective: to construct formulations that treat pigmentary disorders and aging signs at the cellular level, without stripping or compromising the delicate skin barrier.
+            <p className="text-sm sm:text-base text-[#57534E] leading-relaxed font-medium">
+              Cosmalac was founded on a simple belief: every woman deserves to feel confident, radiant, and comfortable in her own skin. We combine nourishing botanical extracts with luxurious textures to create skincare that feels as delightful as it is transformative.
             </p>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Today, our laboratory serves dermatologists, high-end wellness clinics, and retail partners globally, reinforcing trust through peer-reviewed ingredients and transparent manufacturing.
+            <p className="text-sm text-[#57534E] leading-relaxed font-medium">
+              From our signature night care creams to daily brightening blends, our focus remains on thoughtful formulation, skin barrier harmony, and visible beauty outcomes.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="relative aspect-video rounded-3xl overflow-hidden border border-border-pink shadow bg-bg-secondary flex items-center justify-center">
+          {/* Right Column: Unframed Product Image sitting naturally on the page */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-6 flex justify-center lg:justify-end"
+          >
             <img
-              src="/images/scientific_skincare_lab.png"
-              alt="Cosmalac Advanced R&D Lab"
-              className="w-full h-full object-cover"
+              src="/images/luxury_skincare_hero.png"
+              alt="Cosmalac Luxury Skincare Story"
+              className="w-full max-w-lg h-auto object-contain drop-shadow-xl select-none pointer-events-none"
             />
-          </div>
+          </motion.div>
         </div>
 
-        {/* ================= 2. CORE PILLARS (MISSION / VISION) ================= */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white border border-border-pink p-6 rounded-2xl space-y-4">
+        {/* ================= 2. DYNAMIC VISION & MISSION CARDS ================= */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="bg-white border border-[#D8D2C8] p-8 rounded-3xl space-y-4 shadow-xs hover:border-rose-gold transition-colors"
+          >
             <Target className="text-rose-gold" size={28} />
-            <h3 className="text-lg font-bold text-text-primary font-heading">Our Mission</h3>
-            <p className="text-xs text-text-secondary leading-relaxed">
-              To formulate premium, dermatologist-approved skincare solutions that restore confidence, blending scientific accuracy with luxury cosmetic textures.
+            <h3 className="text-lg font-bold text-[#121110] font-heading">
+              Our Mission
+            </h3>
+            <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+              {missionText}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white border border-border-pink p-6 rounded-2xl space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="bg-white border border-[#D8D2C8] p-8 rounded-3xl space-y-4 shadow-xs hover:border-rose-gold transition-colors"
+          >
             <Compass className="text-rose-gold" size={28} />
-            <h3 className="text-lg font-bold text-text-primary font-heading">Our Vision</h3>
-            <p className="text-xs text-text-secondary leading-relaxed">
-              To become a global benchmark for clean, scientific skin brightening, proving that high-end beauty and clinical safety can coexist seamlessly.
+            <h3 className="text-lg font-bold text-[#121110] font-heading">
+              Our Vision
+            </h3>
+            <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+              {visionText}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white border border-border-pink p-6 rounded-2xl space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="bg-white border border-[#D8D2C8] p-8 rounded-3xl space-y-4 shadow-xs hover:border-rose-gold transition-colors"
+          >
             <ShieldCheck className="text-rose-gold" size={28} />
-            <h3 className="text-lg font-bold text-text-primary font-heading">Our Values</h3>
-            <p className="text-xs text-text-secondary leading-relaxed">
-              Efficacy, safety, transparency, and clinical excellence. We never use placeholders or marketing gimmicks; we rely on proven biological science.
+            <h3 className="text-lg font-bold text-[#121110] font-heading">
+              Our Core Values
+            </h3>
+            <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+              Care, transparency, skin comfort, and uncompromising luxury. We craft every product with attention to sensory delight and genuine skin harmony.
             </p>
-          </div>
+          </motion.div>
         </section>
 
-        {/* ================= 3. CHRONOLOGICAL TIMELINE ================= */}
-        <section className="space-y-12">
+        {/* ================= 3. RESTORED LEFT-TO-CENTER ALTERNATING TIMELINE ANIMATION ================= */}
+        <section className="space-y-16 py-8">
           <div className="text-center space-y-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold">Milestones</span>
-            <h2 className="text-3xl font-bold text-text-primary font-heading">Our Chronological Journey</h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+              Heritage Milestones
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[#121110]">
+              Our Journey Since 2016
+            </h2>
+            <p className="text-xs sm:text-sm text-[#57534E] max-w-xl mx-auto font-medium">
+              A timeline of dedication, active skincare innovation, and regional distributor partnerships.
+            </p>
           </div>
 
-          <div className="relative max-w-3xl mx-auto border-l-2 border-border-pink/80 pl-8 space-y-12">
-            {TIMELINE_MILESTONES.map((milestone, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="relative space-y-2 text-left"
-              >
-                {/* Glowing Node */}
-                <div className="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full border-4 border-white bg-rose-gold flex items-center justify-center shadow-sm">
-                  <Calendar size={10} className="text-white" />
-                </div>
-                
-                <span className="text-xs font-bold text-rose-gold font-body">{milestone.year}</span>
-                <h3 className="text-lg font-bold text-text-primary font-heading">{milestone.title}</h3>
-                <p className="text-xs text-text-secondary leading-relaxed font-body">{milestone.description}</p>
-              </motion.div>
-            ))}
+          <div className="relative max-w-4xl mx-auto">
+            {/* Center Vertical Track Line */}
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-rose-gold via-[#D8D2C8] to-rose-gold md:-translate-x-1/2" />
+
+            <div className="space-y-12">
+              {TIMELINE_MILESTONES.map((milestone, idx) => {
+                const isEven = idx % 2 === 0;
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: isEven ? -60 : 60 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className={`relative flex flex-col md:flex-row items-start ${
+                      isEven ? 'md:flex-row-reverse' : ''
+                    } gap-8`}
+                  >
+                    {/* Content Card */}
+                    <div className="w-full md:w-1/2 pl-12 md:pl-0">
+                      <div
+                        className={`bg-white border border-[#D8D2C8] p-6 rounded-3xl shadow-xs hover:shadow-md transition-all duration-300 space-y-2 group ${
+                          isEven ? 'md:mr-8 md:text-right' : 'md:ml-8 md:text-left'
+                        }`}
+                      >
+                        <span className="inline-block px-3 py-1 bg-rose-gold/15 text-rose-gold rounded-full text-xs font-extrabold font-mono tracking-wider">
+                          {milestone.year}
+                        </span>
+                        <h3 className="text-base sm:text-lg font-bold text-[#121110] font-heading group-hover:text-rose-gold transition-colors">
+                          {milestone.title}
+                        </h3>
+                        <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+                          {milestone.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Center Animated Node */}
+                    <div className="absolute left-4 md:left-1/2 top-6 -translate-x-1/2 w-8 h-8 rounded-full border-4 border-white bg-rose-gold shadow-md flex items-center justify-center z-10">
+                      <Sparkles size={12} className="text-white" />
+                    </div>
+
+                    {/* Empty Space for Grid Symmetry on Desktop */}
+                    <div className="hidden md:block md:w-1/2" />
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
-        {/* ================= 4. FOUNDERS MESSAGE ================= */}
-        <section className="bg-bg-secondary border border-border-pink rounded-3xl p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* ================= 4. BRAND COMMITMENT ================= */}
+        <section className="bg-white border border-[#D8D2C8] rounded-3xl p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-xs">
           <div className="lg:col-span-8 space-y-4 text-left">
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Co-Founder's Commitment</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-text-primary font-heading">"Skincare is a Science, Not a Shortcut"</h2>
-            <p className="text-sm text-text-secondary italic leading-relaxed font-body">
-              "We noticed that many whitening creams in the market achieved fast results using hazardous mercury or hydroquinone derivatives, leaving behind irreversible skin damage. At Cosmalac, we set out to prove that by combining stable active ingredients with nourishing botanical lipids, we can deliver beautiful whitening results safely and sustainably."
+            <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+              Brand Commitment
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold font-heading text-[#121110]">
+              "Every Woman Deserves Skin Confidence"
+            </h2>
+            <p className="text-sm text-[#57534E] italic leading-relaxed font-medium">
+              "At Cosmalac, we believe beauty rituals should be calming, luxurious, and dependable. By combining proven active ingredients with gentle nourishing bases, our formulations deliver healthy radiance without harsh compromises."
             </p>
-            <h4 className="text-sm font-semibold text-text-primary font-body">— Anura Gunasekara, Co-Founder & Chief Chemist</h4>
+            <h4 className="text-xs font-bold text-[#121110]">
+              — Cosmalac Skincare Team
+            </h4>
           </div>
           <div className="lg:col-span-4 flex justify-center">
-            <div className="w-32 h-32 rounded-full bg-brand-primary/20 border border-brand-primary/40 flex items-center justify-center">
-              <Heart size={44} className="text-rose-gold animate-pulse" />
+            <div className="w-28 h-28 rounded-full bg-rose-gold/15 border border-rose-gold/30 flex items-center justify-center shadow-xs">
+              <Heart size={38} className="text-rose-gold" />
             </div>
           </div>
         </section>

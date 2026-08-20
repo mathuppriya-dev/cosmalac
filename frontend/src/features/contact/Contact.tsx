@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { Phone, Mail, Clock, MapPin, Send, CheckCircle2, Loader2, Award } from 'lucide-react';
+import { Phone, Mail, Clock, MapPin, Send, CheckCircle2, Loader2, MessageSquare, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 import axiosInstance from '../../lib/axios';
 import { SEO } from '../../components/SEO';
 
 export const Contact = () => {
-  // Inquiry form states
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,118 +50,133 @@ export const Contact = () => {
   return (
     <>
       <SEO
-        title="Contact Us & Distributor Inquiry"
-        description="Get in touch with Cosmalac trade representatives. Access wholesale catalogs, or submit clinic B2B partnerships applications."
+        title="Contact & Brand Inquiries | Cosmalac"
+        description="Connect with the Cosmalac team for product information, brand presentation, or partnership inquiries."
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 font-body">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 font-body text-left bg-[#F1EFE7]">
         {/* Header */}
         <div className="text-center max-w-xl mx-auto space-y-3">
-          <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold">Trade & Support</span>
-          <h1 className="text-4xl font-extrabold text-text-primary font-heading">Connect With Us</h1>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            Reach our trade desk to request wholesale price lists, or consult our skincare advisors.
+          <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+            Brand Inquiries
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#121110] font-heading">
+            Connect With Us
+          </h1>
+          <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed font-medium">
+            Reach our corporate desk to learn more about our formulations, brand story, or trade partnership opportunities.
           </p>
         </div>
 
         {/* Info Grid & Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Info Cards & Map */}
-          <div className="lg:col-span-5 space-y-6 text-left">
-            <div className="bg-white border border-border-pink p-6 rounded-2xl shadow-sm space-y-4">
-              <h3 className="text-lg font-bold text-text-primary font-heading">Global Headquarters</h3>
-              
-              <div className="space-y-3.5 text-xs text-text-secondary">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Left Column: Info Cards */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="bg-white border border-[#D8D2C8] p-6 sm:p-8 rounded-3xl shadow-xs space-y-5">
+              <h3 className="text-lg font-bold text-[#121110] font-heading">
+                Corporate Office
+              </h3>
+
+              <div className="space-y-4 text-xs text-[#57534E] font-medium">
                 <div className="flex items-start gap-3">
-                  <MapPin size={16} className="text-rose-gold mt-0.5 flex-shrink-0" />
-                  <p>123 Beauty Street, Colombo, Sri Lanka</p>
+                  <MapPin size={16} className="text-rose-gold mt-0.5 shrink-0" />
+                  <p className="text-[#121110]">123 Beauty Street, Colombo, Sri Lanka</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Phone size={16} className="text-rose-gold flex-shrink-0" />
-                  <p>+94 11 234 5678</p>
+                  <Phone size={16} className="text-rose-gold shrink-0" />
+                  <p className="text-[#121110]">+94 11 234 5678</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail size={16} className="text-rose-gold flex-shrink-0" />
-                  <p>info@cosmalac.com</p>
+                  <Mail size={16} className="text-rose-gold shrink-0" />
+                  <p className="text-[#121110]">info@cosmalac.com</p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Clock size={16} className="text-rose-gold mt-0.5 flex-shrink-0" />
+                  <Clock size={16} className="text-rose-gold mt-0.5 shrink-0" />
                   <div>
-                    <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
-                    <p className="text-[10px] text-muted">Timezone: UTC+5:30</p>
+                    <p className="text-[#121110]">Monday - Friday: 9:00 AM - 5:00 PM</p>
+                    <p className="text-[10px] text-[#57534E]">Timezone: GMT+5:30</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Stylized vector map placeholder */}
-            <div className="bg-bg-secondary border border-border-pink rounded-3xl p-6 aspect-video flex flex-col items-center justify-center text-center space-y-2 shadow-inner">
-              <MapPin size={28} className="text-rose-gold animate-bounce" />
-              <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider">COSMALAC GMP Facility</h4>
-              <p className="text-[10px] text-text-secondary max-w-xs leading-relaxed">
-                Our compounding laboratories and wholesale loading decks sit close to Colombo Port, enabling rapid maritime and air logistics.
+            <div className="bg-white border border-[#D8D2C8] rounded-3xl p-6 sm:p-8 space-y-3 shadow-xs">
+              <div className="w-10 h-10 rounded-2xl bg-rose-gold/15 text-rose-gold flex items-center justify-center font-bold">
+                <Award size={20} />
+              </div>
+              <h4 className="text-sm font-bold text-[#121110] uppercase tracking-wider">
+                Authorized Showcase Guarantee
+              </h4>
+              <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+                All showcased products represent authentic Cosmalac formulations crafted with premium cosmetic actives and strict quality controls.
               </p>
             </div>
           </div>
 
           {/* Right Column: Dynamic Form */}
-          <div className="lg:col-span-7 bg-white border border-border-pink p-6 md:p-8 rounded-3xl shadow-sm text-left">
+          <div className="lg:col-span-7 bg-white border border-[#D8D2C8] p-6 sm:p-8 rounded-3xl shadow-xs">
             {success ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center py-16 space-y-4"
+                className="text-center py-12 space-y-4"
               >
-                <CheckCircle2 size={48} className="text-rose-gold mx-auto animate-pulse" />
-                <h3 className="text-xl font-bold font-heading text-text-primary">Submission Successful</h3>
-                <p className="text-xs text-text-secondary leading-relaxed max-w-sm mx-auto">
-                  Your inquiry message was received. An executive trade specialist will contact you by phone or email within 24 hours.
+                <CheckCircle2 size={44} className="text-rose-gold mx-auto" />
+                <h3 className="text-xl font-bold font-heading text-[#121110]">
+                  Message Transmitted
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed max-w-sm mx-auto font-medium">
+                  Your inquiry message was received. A representative will contact you within 24 hours.
                 </p>
                 <button
                   onClick={() => setSuccess(false)}
-                  className="mt-4 px-6 py-2 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors"
+                  className="px-6 py-2.5 bg-[#121110] text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors shadow-2xs"
                 >
                   Send Another Message
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="text-lg font-bold text-text-primary font-heading">Submit Trade Inquiry</h3>
-                <p className="text-xs text-text-secondary">
-                  Complete the forms below. General inquiries represent retail customers; distributor inputs register for wholesale trade licenses.
-                </p>
+              <form onSubmit={handleSubmit} className="space-y-4 text-xs font-body">
+                <div>
+                  <h3 className="text-lg font-bold font-heading text-[#121110]">
+                    Send Brand Inquiry
+                  </h3>
+                  <p className="text-xs text-[#57534E] font-medium mt-0.5">
+                    Leave your details below and our team will get back to you promptly.
+                  </p>
+                </div>
 
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-lg">
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-semibold">
                     {error}
                   </div>
                 )}
 
                 {/* Form type Selector */}
-                <div className="flex border border-border-pink rounded-full overflow-hidden p-1 bg-bg-primary/20 text-xs">
+                <div className="flex border border-[#D8D2C8] rounded-2xl overflow-hidden p-1 bg-[#F1EFE7]/50 text-xs">
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'General' })}
-                    className={`flex-1 py-2 font-semibold rounded-full transition-colors ${
-                      formData.type === 'General' ? 'bg-rose-gold text-white shadow-sm' : 'text-text-secondary hover:text-text-primary'
+                    className={`flex-1 py-2 font-bold rounded-xl transition-colors ${
+                      formData.type === 'General' ? 'bg-[#121110] text-white shadow-2xs' : 'text-[#57534E] hover:text-[#121110]'
                     }`}
                   >
-                    B2C Customer Question
+                    General Inquiry
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'Distributor' })}
-                    className={`flex-1 py-2 font-semibold rounded-full transition-colors flex items-center justify-center gap-1 ${
-                      formData.type === 'Distributor' ? 'bg-rose-gold text-white shadow-sm' : 'text-text-secondary hover:text-rose-gold'
+                    className={`flex-1 py-2 font-bold rounded-xl transition-colors flex items-center justify-center gap-1 ${
+                      formData.type === 'Distributor' ? 'bg-[#121110] text-white shadow-2xs' : 'text-[#57534E] hover:text-[#121110]'
                     }`}
                   >
-                    <Award size={12} /> B2B Distributor Application
+                    <Award size={12} /> B2B Trade & Partnership
                   </button>
                 </div>
 
                 {/* Name */}
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
                     Your Name *
                   </label>
                   <input
@@ -170,14 +184,14 @@ export const Contact = () => {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 bg-bg-primary/20 border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold"
+                    className="w-full px-4 py-2.5 bg-[#F1EFE7]/50 border border-[#D8D2C8] rounded-xl text-xs text-[#121110] font-medium focus:outline-none focus:border-rose-gold"
                   />
                 </div>
 
                 {/* Contact Row */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
                       Email Address *
                     </label>
                     <input
@@ -185,11 +199,11 @@ export const Contact = () => {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-2 bg-bg-primary/20 border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold"
+                      className="w-full px-4 py-2.5 bg-[#F1EFE7]/50 border border-[#D8D2C8] rounded-xl text-xs text-[#121110] font-medium focus:outline-none focus:border-rose-gold"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
                       Phone Number *
                     </label>
                     <input
@@ -197,14 +211,14 @@ export const Contact = () => {
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-2 bg-bg-primary/20 border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold"
+                      className="w-full px-4 py-2.5 bg-[#F1EFE7]/50 border border-[#D8D2C8] rounded-xl text-xs text-[#121110] font-medium focus:outline-none focus:border-rose-gold"
                     />
                   </div>
                 </div>
 
                 {/* Company (conditional) */}
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
                     Company / Clinic Name {formData.type === 'Distributor' ? '*' : '(Optional)'}
                   </label>
                   <input
@@ -212,38 +226,38 @@ export const Contact = () => {
                     required={formData.type === 'Distributor'}
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    placeholder={formData.type === 'Distributor' ? 'e.g. MedSkin Clinics Ltd' : 'e.g. Personal'}
-                    className="w-full px-4 py-2 bg-bg-primary/20 border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold"
+                    placeholder={formData.type === 'Distributor' ? 'e.g. Lotus Wellness Spa' : 'e.g. Individual'}
+                    className="w-full px-4 py-2.5 bg-[#F1EFE7]/50 border border-[#D8D2C8] rounded-xl text-xs text-[#121110] font-medium focus:outline-none focus:border-rose-gold"
                   />
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary mb-1">
-                    {formData.type === 'Distributor' ? 'Proposed Territory & Message *' : 'Inquiry Message *'}
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#121110] mb-1">
+                    Message Details *
                   </label>
                   <textarea
                     required
-                    rows={5}
+                    rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder={formData.type === 'Distributor' ? 'Please describe your distribution territories, clinic count, and bulk volumes requested...' : 'Describe your concerns...'}
-                    className="w-full px-4 py-2 bg-bg-primary/20 border border-border-pink rounded-xl text-sm focus:outline-none focus:border-rose-gold resize-none"
+                    placeholder="Describe your inquiry or question about Cosmalac..."
+                    className="w-full px-4 py-2.5 bg-[#F1EFE7]/50 border border-[#D8D2C8] rounded-xl text-xs text-[#121110] font-medium focus:outline-none focus:border-rose-gold resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-[#121110] text-[#F1EFE7] text-xs font-bold uppercase tracking-widest rounded-2xl hover:bg-rose-gold transition-colors flex items-center justify-center gap-2 shadow-xs"
                 >
                   {loading ? (
                     <>
-                      <Loader2 size={14} className="animate-spin" /> Submitting Application...
+                      <Loader2 size={14} className="animate-spin" /> Submitting Inquiry...
                     </>
                   ) : (
                     <>
-                      <Send size={12} /> Send Application
+                      <Send size={13} /> Send Inquiry
                     </>
                   )}
                 </button>

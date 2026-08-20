@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ArrowRight, User } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar = () => {
@@ -9,6 +9,9 @@ export const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
+    document.documentElement.classList.remove('dark');
+    localStorage.removeItem('cosmalac_theme');
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
@@ -16,7 +19,6 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile drawer on navigation change
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
@@ -24,31 +26,32 @@ export const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Products', path: '/products' },
-    { name: 'About', path: '/about' },
-    { name: 'Quality & R&D', path: '/quality' },
-    { name: 'Science Blog', path: '/blog' },
+    { name: 'Our Story', path: '/about' },
+    { name: 'B2B Trade', path: '/b2b' },
     { name: 'FAQ', path: '/faq' },
     { name: 'Contact', path: '/contact' }
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled ? 'glass-nav py-3 shadow-sm' : 'bg-transparent py-5'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-[#F1EFE7]/95 backdrop-blur-md py-3.5 shadow-sm border-b border-[#D8D2C8]'
+          : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link to="/" className="flex flex-col group">
-          <span className="text-2xl font-bold tracking-widest text-text-primary font-heading group-hover:text-rose-gold transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between">
+        {/* Brand Logo - Pure Black */}
+        <Link to="/" className="flex flex-col group text-left">
+          <span className="text-2xl font-extrabold tracking-[0.2em] font-logo text-[#121110] group-hover:text-rose-gold transition-colors duration-300">
             COSMALAC
           </span>
-          <span className="text-[9px] tracking-[0.3em] uppercase text-text-secondary -mt-1 font-body">
-            Est. 2016
+          <span className="text-[9px] tracking-[0.35em] uppercase font-bold text-[#57534E] -mt-1">
+            EST. 2016
           </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links - Pure Crisp Black */}
         <nav className="hidden md:flex space-x-8 items-center">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
@@ -56,15 +59,15 @@ export const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-medium tracking-wide transition-all duration-300 hover:text-rose-gold font-body relative py-1 ${
-                  isActive ? 'text-rose-gold' : 'text-text-secondary'
+                className={`text-xs font-bold uppercase tracking-widest transition-all duration-200 relative py-1 hover:text-rose-gold ${
+                  isActive ? 'text-rose-gold font-extrabold' : 'text-[#121110]'
                 }`}
               >
                 {link.name}
                 {isActive && (
                   <motion.span
                     layoutId="activeNavIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-rose-gold"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-rose-gold"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -73,20 +76,11 @@ export const Navbar = () => {
           })}
         </nav>
 
-        {/* Right CTA / Admin Login */}
+        {/* Right CTA Button */}
         <div className="hidden md:flex items-center space-x-4">
           <Link
-            to="/admin"
-            className="p-2 text-text-secondary hover:text-rose-gold transition-colors duration-300"
-            title="Admin Dashboard"
-            aria-label="Admin Dashboard"
-          >
-            <User size={18} />
-          </Link>
-          
-          <Link
-            to="/contact"
-            className="px-5 py-2.5 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-all duration-300 shadow-sm hover:shadow flex items-center gap-2 group"
+            to="/b2b"
+            className="px-6 py-2.5 bg-[#121110] hover:bg-rose-gold text-white text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-300 shadow-sm flex items-center gap-2 group"
           >
             Inquire Now
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -94,17 +88,10 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Toggle Button */}
-        <div className="md:hidden flex items-center gap-3">
-          <Link
-            to="/admin"
-            className="p-2 text-text-secondary hover:text-rose-gold"
-            aria-label="Admin Dashboard"
-          >
-            <User size={18} />
-          </Link>
+        <div className="md:hidden flex items-center gap-2">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-text-primary focus:outline-none"
+            className="p-2 text-[#121110] focus:outline-none"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -120,29 +107,30 @@ export const Navbar = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="md:hidden bg-bg-secondary/95 border-b border-border-pink backdrop-blur-md overflow-hidden"
+            className="md:hidden bg-white/95 border-b border-[#D8D2C8] backdrop-blur-md overflow-hidden"
           >
-            <div className="px-4 pt-2 pb-6 space-y-3">
+            <div className="px-4 pt-3 pb-6 space-y-2 text-left">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
                     key={link.name}
                     to={link.path}
-                    className={`block px-3 py-2 rounded-lg text-base font-medium tracking-wide transition-colors ${
+                    className={`block px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors ${
                       isActive
-                        ? 'bg-brand-primary/20 text-rose-gold'
-                        : 'text-text-secondary hover:bg-brand-primary/10 hover:text-text-primary'
+                        ? 'bg-rose-gold/15 text-rose-gold'
+                        : 'text-[#121110] hover:bg-bg-secondary'
                     }`}
                   >
                     {link.name}
                   </Link>
                 );
               })}
-              <div className="pt-4 border-t border-border-pink">
+
+              <div className="pt-3 border-t border-[#D8D2C8]">
                 <Link
-                  to="/contact"
-                  className="w-full text-center block py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors duration-300"
+                  to="/b2b"
+                  className="w-full text-center block py-3 bg-[#121110] text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors duration-300"
                 >
                   Inquire Now
                 </Link>
@@ -154,4 +142,5 @@ export const Navbar = () => {
     </header>
   );
 };
+
 export default Navbar;

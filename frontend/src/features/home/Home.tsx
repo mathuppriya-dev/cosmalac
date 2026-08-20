@@ -1,53 +1,93 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, ShieldCheck, Beaker, Star, Layers, Calendar, ChevronDown } from 'lucide-react';
+import {
+  ArrowRight,
+  ShieldCheck,
+  Calendar,
+  ChevronDown,
+  Sparkles,
+  Award,
+  Droplets,
+  Layers,
+  MessageSquare,
+  Instagram,
+  Facebook
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import axiosInstance from '../../lib/axios';
 import ProductCard from '../../components/ProductCard';
-import InquiryModal from '../../components/InquiryModal';
+import ScrollTextReveal from '../../components/ScrollTextReveal';
 import { SEO, getOrgSchema } from '../../components/SEO';
 
-// Pre-defined fallback products for immediate offline visual presentation
-const MOCK_PRODUCTS = [
+const ACTIVE_INGREDIENTS = [
   {
-    id: 'prod_0',
-    title: 'Cosmalac Glow Cream',
-    slug: 'cosmalac-glow-cream',
-    shortDescription: 'Advanced brightening cream with Niacinamide and Alpha Arbutin for a glowing, even skin tone.',
-    category: 'Creams',
-    images: ['/images/glow_cream_jar.png'],
-    isFeatured: true,
-    isBestseller: true
+    name: 'Alpha Arbutin',
+    tag: 'Melanin Inhibition',
+    description: 'A botanical-derived brightening agent that inhibits tyrosinase activity to visibly fade dark spots and acne blemishes without barrier disruption.',
+    icon: Sparkles
   },
   {
-    id: 'prod_1',
-    title: 'Cosmalac Hydrating Serum',
-    slug: 'cosmalac-hydrating-serum',
-    shortDescription: 'Multi-weight Hyaluronic Acid serum infused with Vitamin C for intensive hydration and brightness.',
-    category: 'Serums',
-    images: ['/images/hydrating_serum_dropper.png'],
-    isFeatured: true,
-    isBestseller: false
+    name: 'Nano-Liposome & Snow Lotus',
+    tag: 'Deep Cellular Repair',
+    description: 'Microscopic lipid spheres that deliver rare Snow Lotus extracts deep into the dermal layers to soothe inflammatory blemishes and accelerate recovery.',
+    icon: Droplets
+  },
+  {
+    name: 'Kojic Acid & Niacinamide',
+    tag: 'Even Tone & Clarity',
+    description: 'Synergistic pairing that blocks hyperpigmentation transfer, refines skin texture, and enhances epidermal moisture retention.',
+    icon: Layers
+  },
+  {
+    name: 'Collagen & Ginseng Extract',
+    tag: 'Nightly Firming',
+    description: 'Restores skin elasticity, tightens open pores, and defends against daily free-radical stress while you rest.',
+    icon: Award
   }
 ];
 
 export const Home = () => {
-  const [inquiryOpen, setInquiryOpen] = useState(false);
   const [faqOpenIdx, setFaqOpenIdx] = useState<number | null>(null);
 
-  // Fetch featured products from REST API
-  const { data: products } = useQuery({
-    queryKey: ['featured-products'],
+  // Fetch dynamic CMS content from backend
+  const { data: cmsContent } = useQuery({
+    queryKey: ['public-cms-content'],
     queryFn: async () => {
-      const response = await axiosInstance.get('/products?isFeatured=true');
-      return response.data;
-    },
-    initialData: MOCK_PRODUCTS
+      const res = await axiosInstance.get('/cms/content');
+      return res.data;
+    }
   });
 
+  // Fetch products from REST API
+  const { data: products = [] } = useQuery({
+    queryKey: ['featured-products'],
+    queryFn: async () => {
+      const response = await axiosInstance.get('/products');
+      return response.data;
+    },
+    retry: 1
+  });
+
+  // Dynamic WhatsApp Settings
+  const { data: settings } = useQuery({
+    queryKey: ['public-settings-data'],
+    queryFn: async () => {
+      const res = await axiosInstance.get('/cms/settings');
+      return res.data;
+    }
+  });
+
+  const rawWhatsApp = settings?.whatsAppNumber || '0779178371';
+  const cleanPhone = rawWhatsApp.replace(/[^0-9]/g, '');
+  const formattedWhatsApp = cleanPhone.startsWith('0')
+    ? `94${cleanPhone.substring(1)}`
+    : cleanPhone.startsWith('94')
+    ? cleanPhone
+    : `94${cleanPhone}`;
+
   // Fetch FAQs
-  const { data: faqs } = useQuery({
+  const { data: faqs = [] } = useQuery({
     queryKey: ['faqs-home'],
     queryFn: async () => {
       const response = await axiosInstance.get('/cms/faqs');
@@ -55,16 +95,16 @@ export const Home = () => {
     },
     initialData: [
       {
-        question: 'Are Cosmalac products safe for sensitive skin?',
-        answer: 'Yes, all Cosmalac products are formulated without parabens, synthetic fragrances, or harsh alcohol. We focus on gentle active concentrations combined with barrier-supporting ingredients (like Hyaluronic Acid) and undergo rigorous dermatological testing to minimize any risk of irritation.'
+        question: 'Are Cosmalac products safe for sensitive and combination skin?',
+        answer: 'Yes. Both Crown Whitening Beauty Cream and Queen 8X Night Cream are formulated without parabens, harsh bleaches, or damaging alcohols. We combine active brightening ingredients with soothing botanical lipids to maintain skin barrier balance.'
       },
       {
-        question: 'What makes the Glow Cream so effective for whitening and brightening?',
-        answer: 'The Cosmalac Glow Cream utilizes a dual-action whitening mechanism. Alpha Arbutin (2%) actively blocks tyrosinase (the key enzyme in melanin synthesis), while Niacinamide (5%) inhibits the transfer of pigment into skin cells.'
+        question: 'What makes Crown Whitening Beauty Cream and Queen 8X Night Cream unique?',
+        answer: 'Our formulations combine Alpha Arbutin, Kojic Acid, and Nano-Liposome Snow Lotus extracts to inhibit excess melanin production while delivering intensive nightly nourishment for dark spots, blemishes, and dullness.'
       },
       {
-        question: 'How can we apply to become an international Cosmalac distributor?',
-        answer: 'Interested retail and distribution partners can fill out our detailed B2B Distributor Inquiry Form on the Contact page. Our executive trade team will review your application and respond within 2-3 business days.'
+        question: 'How do spas, beauty salons, and distributors request wholesale catalog pricing?',
+        answer: 'Verified retail and wellness partners can visit our B2B Trade portal or contact our dedicated WhatsApp trade desk for immediate catalog dispatches and tiered wholesale rates.'
       }
     ]
   });
@@ -73,273 +113,345 @@ export const Home = () => {
     setFaqOpenIdx(faqOpenIdx === idx ? null : idx);
   };
 
+  const heroBadge = cmsContent?.hero?.badge?.en || 'EST. 2016';
+  const heroTitle = cmsContent?.hero?.title?.en || 'Reveal Your Natural';
+  const heroHighlight = cmsContent?.hero?.highlight?.en || 'Radiance';
+  const heroDesc =
+    cmsContent?.hero?.description?.en ||
+    'Formulated with luxury botanicals and proven cosmetic actives for visible clarity and effortless skin harmony.';
+
   return (
     <>
       <SEO
-        title="Reveal Your Natural Radiance"
-        description="Premium skincare solutions crafted with scientifically proven active ingredients. Established in 2016. Explore our clinical creams and B2B distributor details."
+        title="COSMALAC | Luxury Skincare & Formulation Showcase"
+        description="Discover Cosmalac luxury skincare. Featuring our signature Crown Whitening Beauty Cream and Queen Beauty Cream 8X Night Whitening Cream."
         schema={getOrgSchema()}
       />
 
-      <div className="space-y-24 pb-20">
-        {/* ================= 1. HERO SECTION ================= */}
-        <section className="relative min-h-[90vh] flex items-center justify-between overflow-hidden bg-gradient-to-br from-bg-primary via-bg-secondary/40 to-bg-primary px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full z-10 py-12">
-            {/* Left Texts */}
+      <div className="font-body text-left bg-[#F1EFE7] min-h-screen">
+        {/* ================= 1. SMOOTH FEATHERED HERO & LIGHTWEIGHT SOCIAL PILLS ================= */}
+        <section className="relative w-full min-h-[95vh] flex flex-col justify-between overflow-hidden bg-[#F6F3EC]">
+          {/* Enhanced Smooth Alpha-Mask Feathering across left & bottom edges */}
+          <div
+            className="absolute right-0 top-0 bottom-0 w-full lg:w-[62%] h-full pointer-events-none z-0 overflow-hidden flex items-center justify-end"
+            style={{
+              maskImage:
+                'linear-gradient(to right, transparent 0%, transparent 12%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.8) 55%, black 75%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.8) 12%, black 25%)',
+              WebkitMaskImage:
+                'linear-gradient(to right, transparent 0%, transparent 12%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.8) 55%, black 75%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.8) 12%, black 25%)',
+              maskComposite: 'intersect',
+              WebkitMaskComposite: 'destination-in'
+            }}
+          >
+            <img
+              src="/images/luxury_skincare_hero.png"
+              alt="Cosmalac Luxury Skincare Collection"
+              className="w-full h-full object-cover lg:object-contain object-right-bottom scale-100 lg:scale-105 transition-transform duration-700"
+            />
+          </div>
+
+          {/* Top Floating Navbar Spacer */}
+          <div className="pt-24 z-10" />
+
+          {/* Left-Aligned Headline Content */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 w-full z-10 py-10 flex-grow flex items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="space-y-6 text-left"
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="max-w-lg lg:max-w-md xl:max-w-xl space-y-6 text-[#121110] text-left"
             >
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-primary/20 border border-brand-primary/40 rounded-full text-xs font-semibold uppercase tracking-wider text-rose-gold font-body">
-                <Calendar size={12} /> EST. 2016
+              {/* Est Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-[#D8D2C8] rounded-md shadow-2xs text-[11px] font-bold uppercase tracking-wider text-[#D8A7B1]">
+                <Calendar size={12} /> {heroBadge}
               </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-text-primary font-heading leading-tight">
-                Reveal Your <br />
-                <span className="text-rose-gold italic">Natural Radiance</span>
+
+              {/* Main Heading */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-heading leading-[1.12] text-[#121110]">
+                {heroTitle} <br />
+                <span className="italic font-serif font-normal text-[#D8A7B1] tracking-normal">
+                  {heroHighlight}
+                </span>
               </h1>
-              <p className="text-base sm:text-lg text-text-secondary leading-relaxed font-body max-w-xl">
-                Premium clinical solutions crafted with scientifically proven active ingredients to nourish, brighten, protect, and enhance your skin.
+
+              {/* Description */}
+              <p className="text-sm sm:text-base text-[#57534E] leading-relaxed font-medium">
+                {heroDesc}
               </p>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-4 pt-2">
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
                 <Link
                   to="/products"
-                  className="px-6 py-3 bg-text-primary text-bg-primary text-sm font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold transition-colors duration-300 shadow-sm flex items-center gap-2 group font-body"
+                  className="px-8 py-3.5 bg-[#121110] hover:bg-rose-gold text-white text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-300 shadow-sm flex items-center gap-2 group"
                 >
-                  Explore Products
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+                  Explore Formulations
+                  <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-300" />
                 </Link>
-                <button
-                  onClick={() => setInquiryOpen(true)}
-                  className="px-6 py-3 bg-white border border-border-pink text-text-primary text-sm font-semibold uppercase tracking-widest rounded-full hover:border-rose-gold transition-colors duration-300 shadow-sm font-body"
-                >
-                  B2B Trade Inquiry
-                </button>
-              </div>
-            </motion.div>
 
-            {/* Right Product Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45 }}
-              className="relative flex justify-center lg:justify-end"
-            >
-              <div className="relative w-full max-w-[450px] aspect-square rounded-full bg-brand-primary/10 flex items-center justify-center animate-float-slow">
-                <img
-                  src="/images/luxury_skincare_hero.png"
-                  alt="Cosmalac Luxury Bottles Showcase"
-                  className="w-[85%] h-[85%] object-contain drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500"
-                />
+                <Link
+                  to="/b2b"
+                  className="px-8 py-3.5 bg-white border border-[#D8D2C8] hover:border-rose-gold text-[#121110] text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-300 shadow-2xs"
+                >
+                  B2B Trade Inquiries
+                </Link>
+              </div>
+
+              {/* Lightweight Interactive Social Channel Pills */}
+              <div className="pt-3 flex items-center gap-3">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#78716C]">
+                  Connect:
+                </span>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://instagram.com/cosmalac"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/85 hover:bg-white border border-[#D8D2C8] text-[#121110] hover:text-rose-gold text-[11px] font-bold transition-all shadow-2xs hover:shadow-xs group"
+                  >
+                    <Instagram size={13} className="text-rose-gold group-hover:scale-110 transition-transform" />
+                    <span>Instagram</span>
+                  </a>
+
+                  <a
+                    href="https://facebook.com/cosmalac"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/85 hover:bg-white border border-[#D8D2C8] text-[#121110] hover:text-rose-gold text-[11px] font-bold transition-all shadow-2xs hover:shadow-xs group"
+                  >
+                    <Facebook size={13} className="text-rose-gold group-hover:scale-110 transition-transform" />
+                    <span>Facebook</span>
+                  </a>
+
+                  <a
+                    href={`https://wa.me/${formattedWhatsApp}?text=${encodeURIComponent(
+                      'Hello Cosmalac Team, I am visiting the website and would like to inquire about your luxury skincare formulations.'
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/85 hover:bg-white border border-[#D8D2C8] text-[#121110] hover:text-emerald-700 text-[11px] font-bold transition-all shadow-2xs hover:shadow-xs group"
+                  >
+                    <MessageSquare size={13} className="text-emerald-600 group-hover:scale-110 transition-transform" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
               </div>
             </motion.div>
           </div>
+
+          {/* Bottom Bar: 01 / 03 Pagination & Scroll Cue */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 w-full z-10 pb-8 pt-4 flex items-end justify-between text-[#57534E] text-xs font-bold uppercase tracking-widest border-t border-[#D8D2C8]/70">
+            {/* Left Pagination */}
+            <div className="flex items-center gap-3">
+              <span className="w-[1.5px] h-4 bg-rose-gold inline-block" />
+              <span className="text-xs text-[#121110] font-mono font-bold">01</span>
+              <span className="text-[11px] text-[#57534E] font-mono">03</span>
+            </div>
+
+            {/* Center Scroll to Discover */}
+            <a
+              href="#heritage-section"
+              className="flex items-center gap-1.5 text-[10px] tracking-[0.25em] text-[#57534E] hover:text-[#121110] transition-colors cursor-pointer"
+            >
+              <span>Scroll to Discover</span>
+              <ChevronDown size={14} className="animate-bounce text-rose-gold" />
+            </a>
+
+            {/* Right Brand Tagline */}
+            <div className="hidden sm:block text-[10px] tracking-widest text-[#78716C] font-semibold">
+              LUXURY FORMULATIONS
+            </div>
+          </div>
         </section>
 
-        {/* ================= 2. TRUST HIGHLIGHTS ================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 bg-white border border-border-pink/55 rounded-3xl p-6 md:p-8 shadow-sm">
+        {/* ================= 2. HERITAGE & KEY PILLARS ================= */}
+        <section id="heritage-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 bg-white border border-[#D8D2C8] rounded-3xl p-6 md:p-8 shadow-xs">
             <div className="flex flex-col items-center text-center p-3">
               <Calendar className="text-rose-gold mb-3" size={28} />
-              <h3 className="text-sm font-semibold text-text-primary font-body uppercase tracking-wider mb-1">Since 2016</h3>
-              <p className="text-xs text-text-secondary font-body">Trusted skincare legacy</p>
+              <h3 className="text-sm font-bold text-[#121110] uppercase tracking-wider mb-1">
+                Since 2016
+              </h3>
+              <p className="text-xs text-[#57534E] font-medium">Over 9 Years of Skincare Trust</p>
             </div>
             <div className="flex flex-col items-center text-center p-3">
-              <Beaker className="text-rose-gold mb-3" size={28} />
-              <h3 className="text-sm font-semibold text-text-primary font-body uppercase tracking-wider mb-1">Active Science</h3>
-              <p className="text-xs text-text-secondary font-body">Formulations that work</p>
+              <Sparkles className="text-rose-gold mb-3" size={28} />
+              <h3 className="text-sm font-bold text-[#121110] uppercase tracking-wider mb-1">
+                Targeted Radiance
+              </h3>
+              <p className="text-xs text-[#57534E] font-medium">Visible Clarity & Tone Balance</p>
             </div>
             <div className="flex flex-col items-center text-center p-3">
               <ShieldCheck className="text-rose-gold mb-3" size={28} />
-              <h3 className="text-sm font-semibold text-text-primary font-body uppercase tracking-wider mb-1">ISO Certified</h3>
-              <p className="text-xs text-text-secondary font-body">International GMP standard</p>
+              <h3 className="text-sm font-bold text-[#121110] uppercase tracking-wider mb-1">
+                Barrier Comfort
+              </h3>
+              <p className="text-xs text-[#57534E] font-medium">Rich Botanical Night Lipids</p>
             </div>
             <div className="flex flex-col items-center text-center p-3">
-              <Star className="text-rose-gold mb-3" size={28} />
-              <h3 className="text-sm font-semibold text-text-primary font-body uppercase tracking-wider mb-1">Clinical Safety</h3>
-              <p className="text-xs text-text-secondary font-body">Dermatologist-tested formulas</p>
+              <Award className="text-rose-gold mb-3" size={28} />
+              <h3 className="text-sm font-bold text-[#121110] uppercase tracking-wider mb-1">
+                B2B Verified
+              </h3>
+              <p className="text-xs text-[#57534E] font-medium">Wholesale Distributor Network</p>
             </div>
           </div>
         </section>
 
-        {/* ================= 3. BRAND LEGACY STORY ================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Our Heritage</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary font-heading">
-              Combining Nature, Science & Skin Health
-            </h2>
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed font-body">
-              Founded in 2016, Cosmalac set out to formulate clinical-grade whitening and anti-aging therapies that deliver visible efficacy while respecting the skin barrier. 
-            </p>
-            <p className="text-sm text-text-secondary leading-relaxed font-body">
-              We leverage pure natural botanicals and clinically proven compounds like Alpha Arbutin and Niacinamide, engineered in our state-of-the-art sterile manufacturing facility.
-            </p>
-            <div className="pt-2">
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-primary hover:text-rose-gold transition-colors font-body"
-              >
-                Discover Our Heritage
-                <ArrowRight size={12} />
-              </Link>
-            </div>
-          </motion.div>
-
-          <div className="relative aspect-video rounded-3xl overflow-hidden border border-border-pink shadow-md bg-bg-secondary flex items-center justify-center">
-            <img
-              src="/images/scientific_skincare_lab.png"
-              alt="Cosmalac Cleanroom Laboratory"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            />
-          </div>
+        {/* ================= 3. SCROLL-DRIVEN WORD-BY-WORD TEXT REVEAL ================= */}
+        <section className="bg-[#EBE7DC]/60 border-t border-b border-[#D8D2C8] py-10 my-10">
+          <ScrollTextReveal
+            text="Every woman deserves radiant, healthy skin that inspires timeless confidence. At Cosmalac, our formulations pair pure botanical nourishment with proven active performance for effortless beauty."
+          />
         </section>
 
-        {/* ================= 4. FEATURED RANGE ================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center space-y-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Our Catalog</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary font-heading">
-              Featured Formulations
+        {/* ================= 4. REDESIGNED 4-PER-ROW PRODUCT SHOWCASE ================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+              Core Formulation Line
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[#121110]">
+              Signature Beauty Creams
             </h2>
-            <p className="text-sm text-text-secondary max-w-xl mx-auto font-body">
-              Explore our primary medical skincare range, optimized for B2C daily therapy and B2B clinical application.
+            <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed font-medium">
+              Explore our signature client formulations, each tailored for noticeable hyperpigmentation reduction, blemish relief, and deep nightly hydration.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.slice(0, 4).map((product: any) => (
-              <ProductCard key={product.id || product._id} product={product} />
+          {/* 4 Products per Row Responsive Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {products.map((product: any) => (
+              <ProductCard key={product.id || product._id || product.slug} product={product} />
             ))}
           </div>
 
-          <div className="text-center pt-4">
+          <div className="text-center pt-6">
             <Link
               to="/products"
-              className="px-8 py-3 bg-text-primary text-bg-primary text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-rose-gold transition-colors duration-300 font-body shadow-sm"
+              className="px-8 py-3.5 bg-[#121110] text-[#F1EFE7] text-xs font-bold uppercase tracking-widest rounded-full hover:bg-rose-gold transition-colors duration-300 shadow-sm inline-flex items-center gap-2"
             >
-              Browse Complete Catalog
+              Browse Complete Showcase <ArrowRight size={14} />
             </Link>
           </div>
         </section>
 
-        {/* ================= 5. BRAND VALUES ================= */}
-        <section className="bg-bg-secondary border-t border-b border-border-pink py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="lg:col-span-2 space-y-4">
-              <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body font-medium">Standards</span>
-              <h2 className="text-3xl font-bold text-text-primary font-heading">Skincare Crafted Without Compromise</h2>
-              <p className="text-sm text-text-secondary leading-relaxed font-body max-w-sm">
-                Every bottle we produce undergoes strict quality validations to guarantee safety and professional performance.
+        {/* ================= 5. FORMULATION SCIENCE & ACTIVES MATRIX ================= */}
+        <section className="bg-white border-t border-b border-[#D8D2C8] py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+                Formulation Science
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[#121110]">
+                Proven Cosmetic Actives
+              </h2>
+              <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed font-medium">
+                Our dermatological approach blends laboratory actives with rare botanical lipids to achieve visible brightening without skin irritation.
               </p>
             </div>
-            <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-6 font-body">
-              <div className="bg-white p-5 rounded-2xl border border-border-pink/40">
-                <Beaker className="text-rose-gold mb-3" size={24} />
-                <h4 className="text-sm font-semibold text-text-primary mb-1">Clinical Actives</h4>
-                <p className="text-xs text-text-secondary leading-relaxed">Optimum concentrations of Niacinamide & Alpha Arbutin.</p>
-              </div>
-              <div className="bg-white p-5 rounded-2xl border border-border-pink/40">
-                <ShieldCheck className="text-rose-gold mb-3" size={24} />
-                <h4 className="text-sm font-semibold text-text-primary mb-1">Zero Irritants</h4>
-                <p className="text-xs text-text-secondary leading-relaxed">Free from parabens, sulfates, and synthetic perfumes.</p>
-              </div>
-              <div className="bg-white p-5 rounded-2xl border border-border-pink/40">
-                <Layers className="text-rose-gold mb-3" size={24} />
-                <h4 className="text-sm font-semibold text-text-primary mb-1">Barrier Safe</h4>
-                <p className="text-xs text-text-secondary leading-relaxed">pH-balanced formulas to support epidermal resilience.</p>
-              </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {ACTIVE_INGREDIENTS.map((ing, idx) => {
+                const Icon = ing.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="p-6 bg-[#F1EFE7]/50 border border-[#D8D2C8] rounded-3xl space-y-3 hover:border-rose-gold transition-all duration-300 shadow-xs flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="w-11 h-11 rounded-2xl bg-white border border-[#D8D2C8] text-rose-gold flex items-center justify-center shadow-2xs">
+                        <Icon size={20} />
+                      </div>
+                      <span className="text-[10px] uppercase font-bold text-rose-gold block">
+                        {ing.tag}
+                      </span>
+                      <h4 className="text-base font-bold text-[#121110] font-heading">
+                        {ing.name}
+                      </h4>
+                      <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+                        {ing.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* ================= 6. TESTIMONIALS ================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center space-y-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Endorsements</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary font-heading">
-              What Dermatologists & Clients Say
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 font-body">
-            <div className="bg-white border border-border-pink p-6 rounded-2xl space-y-4">
-              <div className="flex text-accent-gold gap-0.5">
-                {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-accent-gold" />)}
-              </div>
-              <p className="text-sm text-text-secondary italic leading-relaxed">
-                "Cosmalac formulations successfully balance active therapeutic ingredients with skin barrier protection. The Glow Cream is my top recommendation for fading hyperpigmentation."
+        {/* ================= 6. B2B & DIRECT WHATSAPP CONCIERGE ================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="bg-[#121110] text-[#F1EFE7] rounded-3xl p-8 sm:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
+            <div className="space-y-3 max-w-xl text-left">
+              <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+                Commercial Partnerships & Salons
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
+                Authorized Wholesale & Distribution
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-medium">
+                Are you a wellness spa, salon owner, or regional cosmetic distributor? Partner with Cosmalac for verified batch purity, tiered pricing, and direct factory dispatch.
               </p>
-              <div>
-                <h4 className="text-sm font-semibold text-text-primary">Dr. Sarah Jenkins, MD</h4>
-                <p className="text-xs text-rose-gold">Board-Certified Dermatologist</p>
-              </div>
             </div>
 
-            <div className="bg-white border border-border-pink p-6 rounded-2xl space-y-4">
-              <div className="flex text-accent-gold gap-0.5">
-                {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-accent-gold" />)}
-              </div>
-              <p className="text-sm text-text-secondary italic leading-relaxed">
-                "We introduced Cosmalac into our professional facial treatments last year, and our clients have seen a remarkable difference in skin texture and radiance. Truly premium skincare."
-              </p>
-              <div>
-                <h4 className="text-sm font-semibold text-text-primary">Priya Perera</h4>
-                <p className="text-xs text-rose-gold">Spa & Wellness Manager</p>
-              </div>
-            </div>
+            <div className="flex flex-col sm:flex-row gap-4 shrink-0 w-full lg:w-auto">
+              <a
+                href={`https://wa.me/${formattedWhatsApp}?text=${encodeURIComponent(
+                  'Hello Cosmalac Team, I would like to inquire about B2B Wholesale distribution and catalog pricing.'
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-7 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-widest rounded-full transition-colors duration-300 shadow-sm flex items-center justify-center gap-2"
+              >
+                <MessageSquare size={16} /> WhatsApp Fast-Track
+              </a>
 
-            <div className="bg-white border border-border-pink p-6 rounded-2xl space-y-4">
-              <div className="flex text-accent-gold gap-0.5">
-                {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-accent-gold" />)}
-              </div>
-              <p className="text-sm text-text-secondary italic leading-relaxed">
-                "As a trade distributor, partnering with Cosmalac has been an outstanding experience. Their manufacturing standards are impeccable and catalog presentation builds immediate trust."
-              </p>
-              <div>
-                <h4 className="text-sm font-semibold text-text-primary">Michael Silva</h4>
-                <p className="text-xs text-rose-gold">Managing Director, Aura Wellness</p>
-              </div>
+              <Link
+                to="/b2b"
+                className="px-7 py-3.5 bg-rose-gold text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white hover:text-[#121110] transition-colors duration-300 shadow-sm text-center"
+              >
+                Apply for Wholesale
+              </Link>
             </div>
           </div>
         </section>
 
         {/* ================= 7. ACCORDION FAQS ================= */}
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-widest text-rose-gold font-body">Support</span>
-            <h2 className="text-3xl font-bold text-text-primary font-heading">Frequently Asked Questions</h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-rose-gold">
+              Questions & Answers
+            </span>
+            <h2 className="text-3xl font-bold font-heading text-[#121110]">
+              Frequently Asked Questions
+            </h2>
           </div>
 
-          <div className="space-y-4 font-body">
+          <div className="space-y-3">
             {faqs.map((faq: any, idx: number) => (
-              <div key={idx} className="border border-border-pink bg-white rounded-xl overflow-hidden">
+              <div
+                key={idx}
+                className="border border-[#D8D2C8] bg-white rounded-2xl overflow-hidden shadow-2xs"
+              >
                 <button
                   onClick={() => toggleFaq(idx)}
-                  className="w-full px-5 py-4 flex items-center justify-between text-left font-medium text-sm text-text-primary hover:bg-bg-secondary/40 transition-colors"
+                  className="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-xs sm:text-sm text-[#121110] hover:bg-[#EBE7DC]/40 transition-colors"
                 >
-                  {faq.question}
+                  <span>{faq.question}</span>
                   <ChevronDown
                     size={16}
-                    className={`text-text-secondary transition-transform duration-300 ${
+                    className={`text-rose-gold shrink-0 transition-transform duration-300 ml-3 ${
                       faqOpenIdx === idx ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
                 <div
                   className={`transition-all duration-300 overflow-hidden ${
-                    faqOpenIdx === idx ? 'max-h-40 border-t border-border-pink' : 'max-h-0'
+                    faqOpenIdx === idx ? 'max-h-48 border-t border-[#D8D2C8]/60' : 'max-h-0'
                   }`}
                 >
-                  <p className="p-5 text-xs text-text-secondary leading-relaxed bg-bg-primary/20">
+                  <p className="p-5 text-xs text-[#57534E] leading-relaxed bg-[#F1EFE7]/50 font-medium">
                     {faq.answer}
                   </p>
                 </div>
@@ -348,8 +460,6 @@ export const Home = () => {
           </div>
         </section>
       </div>
-
-      <InquiryModal isOpen={inquiryOpen} onClose={() => setInquiryOpen(false)} />
     </>
   );
 };
