@@ -157,14 +157,14 @@ export const Home = () => {
         {/* ================= 1. DYNAMIC HERO WITH ENHANCED EDGE TRANSPARENCY ================= */}
         {isSectionVisible('hero') && (
           <section className="relative w-full min-h-[95vh] flex flex-col justify-between overflow-hidden bg-[#F6F3EC]">
-            {/* Seamless 4-Directional Edge Transparency Mask (Left, Right, Top, Bottom) */}
+            {/* Seamless 4-Directional Edge Transparency Mask (Deep Left, Right, Top, Bottom Feathering) */}
             <div
-              className="absolute right-0 top-0 bottom-0 w-full lg:w-[54%] xl:w-[50%] h-full pointer-events-none z-0 overflow-hidden flex items-center justify-end"
+              className="absolute right-0 top-0 bottom-0 w-full lg:w-[58%] xl:w-[52%] h-full pointer-events-none z-0 overflow-hidden flex items-center justify-end"
               style={{
                 maskImage:
-                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) 6%, rgba(0,0,0,0.7) 18%, black 32%, black 72%, rgba(0,0,0,0.6) 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 6%, black 18%, black 82%, rgba(0,0,0,0.3) 94%, transparent 100%)',
+                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 4%, rgba(0,0,0,0.3) 14%, rgba(0,0,0,0.75) 26%, black 40%, black 62%, rgba(0,0,0,0.75) 76%, rgba(0,0,0,0.3) 88%, rgba(0,0,0,0.05) 96%, transparent 100%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 4%, rgba(0,0,0,0.6) 12%, black 22%, black 78%, rgba(0,0,0,0.6) 88%, rgba(0,0,0,0.1) 96%, transparent 100%)',
                 WebkitMaskImage:
-                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) 6%, rgba(0,0,0,0.7) 18%, black 32%, black 72%, rgba(0,0,0,0.6) 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 6%, black 18%, black 82%, rgba(0,0,0,0.3) 94%, transparent 100%)',
+                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 4%, rgba(0,0,0,0.3) 14%, rgba(0,0,0,0.75) 26%, black 40%, black 62%, rgba(0,0,0,0.75) 76%, rgba(0,0,0,0.3) 88%, rgba(0,0,0,0.05) 96%, transparent 100%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 4%, rgba(0,0,0,0.6) 12%, black 22%, black 78%, rgba(0,0,0,0.6) 88%, rgba(0,0,0,0.1) 96%, transparent 100%)',
                 maskComposite: 'intersect',
                 WebkitMaskComposite: 'destination-in'
               }}
