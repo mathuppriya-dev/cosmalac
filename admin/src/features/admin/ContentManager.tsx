@@ -71,6 +71,7 @@ export const ContentManager = () => {
   const [success, setSuccess] = useState(false);
   const [previewTab, setPreviewTab] = useState<'hero' | 'vision' | 'pillars' | 'sections'>('hero');
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const publicStoreUrl = import.meta.env.VITE_PUBLIC_STORE_URL || 'http://localhost:5173';
 
   // Form State initialized with rich default values
   const [contentForm, setContentForm] = useState<any>(DEFAULT_CONTENT);
@@ -161,7 +162,7 @@ export const ContentManager = () => {
 
         <div className="flex items-center gap-3">
           <a
-            href="/"
+            href={publicStoreUrl}
             target="_blank"
             rel="noreferrer"
             className="px-4 py-2 bg-white border border-[#D8D2C8] hover:border-rose-gold text-[#121110] text-xs font-bold uppercase tracking-wider rounded-xl shadow-2xs inline-flex items-center gap-1.5 transition-colors"

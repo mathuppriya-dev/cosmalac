@@ -1,17 +1,15 @@
 import { Router } from 'express';
-import { login, refreshToken, getMe } from '../controllers/authController';
+import { login, refreshToken, getMe, requestOtp, verifyOtp } from '../controllers/authController';
 import { authenticateJWT } from '../middlewares/auth';
 import { authLimiter } from '../middlewares/rateLimiter';
-import { validateBody, loginValidationSchema } from '../middlewares/validate';
 
 const router = Router();
 
 /**
  * @openapi
- * /api/auth/login:
+ * /api/auth/request-otp:
  *   post:
- *     summary: Admin panel secure login
- *     description: Authenticates admin credentials and returns an access token along with a refresh token.
+ *     summary: Request OTP access code for admin login
  *     tags:
  *       - Authentication
  *     requestBody:
@@ -22,50 +20,22 @@ const router = Router();
  *             type: object
  *             required:
  *               - email
- *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 format: email
  *                 example: admin@cosmalac.com
- *               password:
- *                 type: string
- *                 format: password
- *                 example: CosmalacPremium2026!
  *     responses:
  *       200:
- *         description: Login successful. Returns JWT credentials.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                 refreshToken:
- *                   type: string
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     email:
- *                       type: string
- *                     role:
- *                       type: string
- *       401:
- *         description: Invalid credentials
- *       429:
- *         description: Too many login attempts
+ *         description: OTP successfully generated and sent to email
  */
-router.post('/login', authLimiter, validateBody(loginValidationSchema), login);
+router.post('/request-otp', authLimiter, requestOtp);
 
 /**
  * @openapi
- * /api/auth/refresh:
+ * /api/auth/verify-otp:
  *   post:
- *     summary: Rotate session token
- *     description: Exchange a valid refresh token for a new short-lived access token.
+ *     summary: Verify 6-digit OTP code and receive session token
  *     tags:
  *       - Authentication
  *     requestBody:
@@ -75,22 +45,39 @@ router.post('/login', authLimiter, validateBody(loginValidationSchema), login);
  *           schema:
  *             type: object
  *             required:
- *               - refreshToken
+ *               - email
+ *               - otp
  *             properties:
- *               refreshToken:
+ *               email:
  *                 type: string
+ *                 format: email
+ *                 example: admin@cosmalac.com
+ *               otp:
+ *                 type: string
+ *                 example: "123456"
  *     responses:
  *       200:
- *         description: Token successfully rotated.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *       403:
- *         description: Invalid refresh token
+ *         description: OTP verified. Returns JWT session tokens.
+ */
+router.post('/verify-otp', authLimiter, verifyOtp);
+
+/**
+ * @openapi
+ * /api/auth/login:
+ *   post:
+ *     summary: Password fallback login
+ *     tags:
+ *       - Authentication
+ */
+router.post('/login', authLimiter, login);
+
+/**
+ * @openapi
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     tags:
+ *       - Authentication
  */
 router.post('/refresh', refreshToken);
 
@@ -98,17 +85,9 @@ router.post('/refresh', refreshToken);
  * @openapi
  * /api/auth/me:
  *   get:
- *     summary: Retrieve active user session profile
- *     description: Returns the user object derived from the valid Bearer token.
+ *     summary: Get current authenticated admin profile
  *     tags:
  *       - Authentication
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User session details retrieved successfully.
- *       401:
- *         description: Unauthorized: Invalid token or missing header
  */
 router.get('/me', authenticateJWT, getMe);
 

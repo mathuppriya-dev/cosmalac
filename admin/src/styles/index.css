@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Luxury Color Palette */
+  --color-bg-primary: #F1EFE7;
+  --color-bg-secondary: #E9E5D9;
+  --color-brand-primary: #F7C6D9;
+  --color-brand-secondary: #F4B6C2;
+  --color-blush-pink: #FADADD;
+  --color-rose-gold: #D8A7B1;
+  --color-accent-gold: #D4AF37;
+  --color-text-primary: #2D2D2D;
+  --color-text-secondary: #6E6E6E;
+  --color-border-pink: #F1DCE3;
+
+  /* Typography */
+  --font-logo: 'Josefin Sans', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --font-subheading: 'Outfit', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+@layer utilities {
+  /* Custom Luxury Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F1EFE7;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D8A7B1;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #F4B6C2;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(241, 220, 227, 0.8);
+  }
+
+  .glass-nav {
+    background: rgba(241, 239, 231, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(216, 167, 177, 0.3);
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(241, 220, 227, 0.8);
+  }
+}

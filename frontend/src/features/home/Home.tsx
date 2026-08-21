@@ -157,14 +157,14 @@ export const Home = () => {
         {/* ================= 1. DYNAMIC HERO WITH ENHANCED EDGE TRANSPARENCY ================= */}
         {isSectionVisible('hero') && (
           <section className="relative w-full min-h-[95vh] flex flex-col justify-between overflow-hidden bg-[#F6F3EC]">
-            {/* Seamless Multi-Directional Edge Transparency Mask */}
+            {/* Seamless 4-Directional Edge Transparency Mask (Left, Right, Top, Bottom) */}
             <div
-              className="absolute right-0 top-0 bottom-0 w-full lg:w-[62%] h-full pointer-events-none z-0 overflow-hidden flex items-center justify-end"
+              className="absolute right-0 top-0 bottom-0 w-full lg:w-[54%] xl:w-[50%] h-full pointer-events-none z-0 overflow-hidden flex items-center justify-end"
               style={{
                 maskImage:
-                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.08) 6%, rgba(0,0,0,0.4) 18%, rgba(0,0,0,0.9) 36%, black 50%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.7) 10%, black 22%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 8%, black 18%)',
+                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) 6%, rgba(0,0,0,0.7) 18%, black 32%, black 72%, rgba(0,0,0,0.6) 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 6%, black 18%, black 82%, rgba(0,0,0,0.3) 94%, transparent 100%)',
                 WebkitMaskImage:
-                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.08) 6%, rgba(0,0,0,0.4) 18%, rgba(0,0,0,0.9) 36%, black 50%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.7) 10%, black 22%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 8%, black 18%)',
+                  'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.1) 6%, rgba(0,0,0,0.7) 18%, black 32%, black 72%, rgba(0,0,0,0.6) 88%, transparent 100%), linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 6%, black 18%, black 82%, rgba(0,0,0,0.3) 94%, transparent 100%)',
                 maskComposite: 'intersect',
                 WebkitMaskComposite: 'destination-in'
               }}
