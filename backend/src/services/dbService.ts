@@ -1,6 +1,6 @@
 import User, { IUser } from '../models/User';
 import Product, { IProduct } from '../models/Product';
-import { Category, Ingredient, Inquiry, Blog, Testimonial, FAQ, SiteSettings, CmsContent } from '../models/OtherModels';
+import { Inquiry, FAQ, SiteSettings, CmsContent, MediaItem } from '../models/OtherModels';
 import { isMockDB, readMockData, writeMockData } from '../config/db';
 
 // Helper to generate IDs for local JSON database
