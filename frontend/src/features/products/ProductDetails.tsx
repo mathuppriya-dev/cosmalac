@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Send, Check, Sparkles, Box, Info, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Send, Check, ShieldAlert, Sparkles, Box, Info, MessageSquare } from 'lucide-react';
 import axiosInstance from '../../lib/axios';
 import { SEO } from '../../components/SEO';
 
@@ -22,47 +22,6 @@ const DEFAULT_BENEFITS = [
   'Protects against environmental free radicals'
 ];
 
-const FALLBACK_PRODUCTS_MAP: Record<string, any> = {
-  'crown-whitening-beauty-cream': {
-    id: 'prod_crown_1',
-    slug: 'crown-whitening-beauty-cream',
-    title: 'Crown Whitening Beauty Cream',
-    category: 'Creams',
-    size: '20g | 0.7 oz',
-    status: 'active',
-    images: ['/images/crown_whitening_cream.jpg'],
-    shortDescription: 'Signature botanical night treatment for visible clarity, tone balance, and radiance.',
-    description: 'COSMALAC Crown Whitening Beauty Cream is an iconic formulation crafted with over 9 years of skincare trust. Designed to diminish acne marks, stubborn dark spots, and dullness while providing deep, nourishing hydration and a luminous finish without greasy residue.',
-    benefits: ['Targeted Blemish Clarifying', 'Gentle Dark Spot Eraser', 'Non-Greasy Botanical Base', 'Nighttime Barrier Restorative', 'Pore-Refining Radiance'],
-    ingredients: ['Alpha Arbutin', 'Kojic Acid', 'Licorice Extract', 'Vitamin B3', 'Mulberry Root Extract', 'Hydrolyzed Marine Collagen'],
-    directions: 'Apply evenly across cleansed face and neck every evening before bed. Massage gently until fully absorbed.',
-    warnings: 'For cosmetic external use only. Avoid direct contact with eyes. Patch test on inner forearm prior to initial use.',
-    storage: 'Store in a cool, dry place away from direct sunlight. Keep cap tightly closed.',
-    packaging: '20g UV-defending amber glass container with brushed bronze cap.',
-    isFeatured: true,
-    isBestseller: true
-  },
-  'queen-beauty-cream-8x-night': {
-    id: 'prod_queen_2',
-    slug: 'queen-beauty-cream-8x-night',
-    title: 'Queen Beauty Cream (8X Night Whitening)',
-    category: 'Night Cream',
-    size: '20g | 0.7 oz',
-    status: 'active',
-    images: ['/images/queen_beauty_cream.jpg'],
-    shortDescription: 'High-potency 8X intensive whitening night formulation for stubborn hyperpigmentation.',
-    description: 'COSMALAC Queen Beauty Cream represents our highest-strength night repair complex. Enriched with 8X concentrated brightening botanicals and nano-liposomes for noticeable radiance, elasticity, and tone evening.',
-    benefits: ['8X Concentrated Whitening Action', 'Collagen Density & Elasticity', 'Under-Eye & Melasma Care', 'Velvety Rapid Absorption', 'Antioxidant Defense'],
-    ingredients: ['Snow Lotus Extract', 'Alpha Arbutin', 'Hydrolyzed Marine Collagen', 'Ginseng Root Extract', 'Nano-Liposomes', 'Vitamin E Acetate'],
-    directions: 'Gently massage a pearl-sized amount onto target blemish areas and neck at night.',
-    warnings: 'For external use only. Keep out of reach of children.',
-    storage: 'Store below 25°C in a dry environment away from heat.',
-    packaging: '20g frosted luxury cosmetic jar with double-seal protective insert.',
-    isFeatured: true,
-    isBestseller: true
-  }
-};
-
 export const ProductDetails = () => {
   const { slug } = useParams<{ slug: string }>();
   const [activeTab, setActiveTab] = useState<'ingredients' | 'benefits' | 'usage' | 'specs'>('ingredients');
@@ -76,8 +35,8 @@ export const ProductDetails = () => {
   });
   const [inquirySubmitted, setInquirySubmitted] = useState(false);
 
-  // Fetch product details
-  const { data: fetchedProduct, isLoading } = useQuery({
+  // Fetch live product details from Railway API
+  const { data: product, isLoading, isError } = useQuery({
     queryKey: ['product-details', slug],
     queryFn: async () => {
       const response = await axiosInstance.get(`/products/${slug}`);
@@ -94,9 +53,6 @@ export const ProductDetails = () => {
       return res.data;
     }
   });
-
-  // Use fetched product or fallback map
-  const product = fetchedProduct || (slug ? FALLBACK_PRODUCTS_MAP[slug] || FALLBACK_PRODUCTS_MAP['crown-whitening-beauty-cream'] : FALLBACK_PRODUCTS_MAP['crown-whitening-beauty-cream']);
 
   const rawWhatsApp = settings?.whatsAppNumber || '0779178371';
   const cleanPhone = rawWhatsApp.replace(/[^0-9]/g, '');
@@ -146,7 +102,29 @@ export const ProductDetails = () => {
     );
   }
 
-  // Smart image fallback
+  if (isError || !product) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center bg-[#F1EFE7] px-4">
+        <div className="text-center max-w-md space-y-4 bg-white border border-[#D8D2C8] p-8 rounded-3xl shadow-sm">
+          <ShieldAlert size={40} className="text-rose-gold mx-auto" />
+          <h2 className="text-2xl font-bold font-heading text-[#121110]">
+            Formulation Not Found
+          </h2>
+          <p className="text-xs text-[#57534E] leading-relaxed">
+            We could not retrieve the details for this formulation. Please check the catalog or try again later.
+          </p>
+          <Link
+            to="/products"
+            className="inline-block px-6 py-3 bg-[#121110] text-[#F1EFE7] text-xs font-bold uppercase tracking-wider rounded-full hover:bg-rose-gold transition-colors"
+          >
+            Back to Catalog
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Image resolution
   let imageUrl = '/images/crown_whitening_cream.jpg';
   if (product.images && product.images.length > 0 && product.images[0]) {
     imageUrl = product.images[0];

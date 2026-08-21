@@ -1,53 +1,18 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Search, SlidersHorizontal, Sparkles, ShieldCheck, Award, Heart } from 'lucide-react';
+import { Search, SlidersHorizontal, Sparkles, ShieldCheck, Award, Heart, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import axiosInstance from '../../lib/axios';
 import ProductCard from '../../components/ProductCard';
 import { SEO } from '../../components/SEO';
-
-const DEFAULT_FALLBACK_PRODUCTS = [
-  {
-    id: 'prod_crown_1',
-    slug: 'crown-whitening-beauty-cream',
-    title: 'Crown Whitening Beauty Cream',
-    category: 'Creams',
-    size: '20g | 0.7 oz',
-    status: 'active',
-    images: ['/images/crown_whitening_cream.jpg'],
-    shortDescription: 'Signature botanical night treatment for visible clarity, tone balance, and radiance.',
-    description: 'COSMALAC Crown Whitening Beauty Cream is an iconic formulation crafted with over 9 years of skincare trust. Designed to diminish acne marks, stubborn dark spots, and dullness while providing deep, nourishing hydration.',
-    benefits: ['Targeted Blemish Clarifying', 'Gentle Dark Spot Eraser', 'Non-Greasy Botanical Base', 'Nighttime Barrier Restorative'],
-    ingredients: ['Alpha Arbutin', 'Kojic Acid', 'Licorice Extract', 'Vitamin B3', 'Mulberry Root Extract', 'Collagen Peptides'],
-    directions: 'Apply evenly across cleansed face and neck every evening before bed.',
-    isFeatured: true,
-    isBestseller: true
-  },
-  {
-    id: 'prod_queen_2',
-    slug: 'queen-beauty-cream-8x-night',
-    title: 'Queen Beauty Cream (8X Night Whitening)',
-    category: 'Night Cream',
-    size: '20g | 0.7 oz',
-    status: 'active',
-    images: ['/images/queen_beauty_cream.jpg'],
-    shortDescription: 'High-potency 8X intensive whitening night formulation for stubborn hyperpigmentation.',
-    description: 'COSMALAC Queen Beauty Cream represents our highest-strength night repair complex. Enriched with 8X concentrated brightening botanicals and nano-liposomes for noticeable radiance.',
-    benefits: ['8X Concentrated Whitening Action', 'Collagen Density & Elasticity', 'Under-Eye & Melasma Care', 'Velvety Rapid Absorption'],
-    ingredients: ['Snow Lotus Extract', 'Alpha Arbutin', 'Hydrolyzed Marine Collagen', 'Ginseng Root Extract', 'Nano-Liposomes', 'Vitamin E Acetate'],
-    directions: 'Gently massage a pearl-sized amount onto target areas at night.',
-    isFeatured: true,
-    isBestseller: true
-  }
-];
 
 export const Products = () => {
   const [selectedCat, setSelectedCat] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
 
-  // Query catalog data via React Query
-  const { data: fetchedProducts = [], isLoading } = useQuery({
+  // Query live catalog data from Railway API
+  const { data: products = [], isLoading, isError, refetch } = useQuery({
     queryKey: ['products-list', selectedCat, searchQuery],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -57,13 +22,8 @@ export const Products = () => {
       const response = await axiosInstance.get(`/products?${params.toString()}`);
       return response.data;
     },
-    retry: 1
+    retry: 2
   });
-
-  // Use fetched products if available, otherwise seamlessly fallback to curated formulations
-  const products = (fetchedProducts && fetchedProducts.length > 0)
-    ? fetchedProducts
-    : DEFAULT_FALLBACK_PRODUCTS;
 
   // Local filtering & sorting logic
   const filteredProducts = products
@@ -167,10 +127,24 @@ export const Products = () => {
         {/* ================= 3. PRODUCT SHOWCASE GRID ================= */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 space-y-10">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {[...Array(2)].map((_, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+              {[...Array(4)].map((_, i) => (
                 <div key={i} className="bg-white rounded-3xl h-96 border border-[#D8D2C8] animate-pulse" />
               ))}
+            </div>
+          ) : isError ? (
+            <div className="p-12 text-center bg-white border border-[#D8D2C8] rounded-3xl space-y-4 max-w-md mx-auto shadow-xs">
+              <Sparkles className="text-rose-gold mx-auto" size={36} />
+              <h3 className="text-lg font-bold text-[#121110]">Database Connection</h3>
+              <p className="text-xs text-[#57534E] leading-relaxed font-medium">
+                Unable to load product formulations. Please click reload to refresh.
+              </p>
+              <button
+                onClick={() => refetch()}
+                className="px-6 py-2.5 bg-[#121110] text-white rounded-full text-xs font-bold uppercase tracking-wider inline-flex items-center gap-2 hover:bg-rose-gold transition-colors"
+              >
+                <RefreshCw size={12} /> Reload Catalog
+              </button>
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="py-20 text-center space-y-3 bg-white border border-[#D8D2C8] rounded-3xl p-10 max-w-xl mx-auto shadow-xs">
