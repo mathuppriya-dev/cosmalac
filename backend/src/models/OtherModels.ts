@@ -196,3 +196,169 @@ const FAQSchema = new Schema({
 });
 
 export const FAQ = mongoose.model<IFAQ>('FAQ', FAQSchema);
+
+// 6. Category Schema
+export interface ICategory extends Document {
+  name: string;
+  slug: string;
+  description?: string;
+}
+
+const CategorySchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      default: ''
+    }
+  },
+  { timestamps: true }
+);
+
+export const Category = mongoose.model<ICategory>(
+  'Category',
+  CategorySchema
+);
+
+
+// 7. Ingredient Schema
+export interface IIngredient extends Document {
+  name: string;
+  description?: string;
+}
+
+const IngredientSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      default: ''
+    }
+  },
+  { timestamps: true }
+);
+
+export const Ingredient = mongoose.model<IIngredient>(
+  'Ingredient',
+  IngredientSchema
+);
+
+
+// 8. Blog Schema
+export interface IBlog extends Document {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  content: string;
+  bannerImage?: string;
+  author?: string;
+  publishedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const BlogSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+    excerpt: {
+      type: String,
+      default: ''
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    bannerImage: {
+      type: String,
+      default: ''
+    },
+    author: {
+      type: String,
+      default: 'Cosmalac'
+    },
+    publishedAt: {
+      type: Date,
+      default: Date.now
+    }
+  },
+  { timestamps: true }
+);
+
+export const Blog = mongoose.model<IBlog>(
+  'Blog',
+  BlogSchema
+);
+
+
+// 9. Testimonial Schema
+export interface ITestimonial extends Document {
+  name: string;
+  role?: string;
+  company?: string;
+  content: string;
+  image?: string;
+  rating?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const TestimonialSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    role: {
+      type: String,
+      default: ''
+    },
+    company: {
+      type: String,
+      default: ''
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String,
+      default: ''
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5
+    }
+  },
+  { timestamps: true }
+);
+
+export const Testimonial = mongoose.model<ITestimonial>(
+  'Testimonial',
+  TestimonialSchema
+);
