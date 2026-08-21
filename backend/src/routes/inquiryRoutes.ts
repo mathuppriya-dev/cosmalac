@@ -10,7 +10,17 @@ const router = Router();
 router.post('/', inquiryLimiter, validateBody(inquiryValidationSchema), submitInquiry);
 
 // Protected admin controls
-router.get('/', authenticateJWT, requireRole(['SuperAdmin', 'Admin', 'Editor', 'Viewer']), getInquiries);
-router.put('/:id', authenticateJWT, requireRole(['SuperAdmin', 'Admin', 'Editor']), updateInquiry);
+router.get(
+    '/',
+    authenticateJWT,
+    requireRole(['SuperAdmin', 'Editor', 'Viewer']),
+    getInquiries
+);
 
+router.put(
+    '/:id',
+    authenticateJWT,
+    requireRole(['SuperAdmin', 'Editor']),
+    updateInquiry
+);
 export default router;
