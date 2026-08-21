@@ -77,7 +77,7 @@ export const ContentManager = () => {
   const [contentForm, setContentForm] = useState<any>(DEFAULT_CONTENT);
 
   // Fetch CMS Content
-  const { isLoading } = useQuery({
+  useQuery({
     queryKey: ['admin-cms-content'],
     queryFn: async () => {
       const res = await axiosInstance.get('/cms/content');
@@ -556,11 +556,10 @@ export const ContentManager = () => {
                 {contentForm.sections.map((sec: any) => (
                   <div
                     key={sec.id}
-                    className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all ${
-                      sec.visible
-                        ? 'bg-white border-[#D8D2C8]'
-                        : 'bg-[#F1EFE7]/60 border-[#D8D2C8]/60 opacity-70'
-                    }`}
+                    className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all ${sec.visible
+                      ? 'bg-white border-[#D8D2C8]'
+                      : 'bg-[#F1EFE7]/60 border-[#D8D2C8]/60 opacity-70'
+                      }`}
                   >
                     <div>
                       <h4 className="text-xs font-bold text-[#121110]">{sec.name}</h4>
@@ -572,11 +571,10 @@ export const ContentManager = () => {
                     <button
                       type="button"
                       onClick={() => toggleSectionVisibility(sec.id)}
-                      className={`p-2 rounded-xl transition-colors ${
-                        sec.visible
-                          ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
-                          : 'bg-stone-200 text-stone-600 hover:bg-stone-300'
-                      }`}
+                      className={`p-2 rounded-xl transition-colors ${sec.visible
+                        ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
+                        : 'bg-stone-200 text-stone-600 hover:bg-stone-300'
+                        }`}
                       title={sec.visible ? 'Click to hide' : 'Click to show'}
                     >
                       {sec.visible ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -632,44 +630,40 @@ export const ContentManager = () => {
               <button
                 type="button"
                 onClick={() => setPreviewTab('hero')}
-                className={`py-1.5 rounded-lg transition-all ${
-                  previewTab === 'hero'
-                    ? 'bg-[#121110] text-white shadow-2xs'
-                    : 'text-[#57534E] hover:text-[#121110]'
-                }`}
+                className={`py-1.5 rounded-lg transition-all ${previewTab === 'hero'
+                  ? 'bg-[#121110] text-white shadow-2xs'
+                  : 'text-[#57534E] hover:text-[#121110]'
+                  }`}
               >
                 Hero
               </button>
               <button
                 type="button"
                 onClick={() => setPreviewTab('vision')}
-                className={`py-1.5 rounded-lg transition-all ${
-                  previewTab === 'vision'
-                    ? 'bg-[#121110] text-white shadow-2xs'
-                    : 'text-[#57534E] hover:text-[#121110]'
-                }`}
+                className={`py-1.5 rounded-lg transition-all ${previewTab === 'vision'
+                  ? 'bg-[#121110] text-white shadow-2xs'
+                  : 'text-[#57534E] hover:text-[#121110]'
+                  }`}
               >
                 Vision
               </button>
               <button
                 type="button"
                 onClick={() => setPreviewTab('pillars')}
-                className={`py-1.5 rounded-lg transition-all ${
-                  previewTab === 'pillars'
-                    ? 'bg-[#121110] text-white shadow-2xs'
-                    : 'text-[#57534E] hover:text-[#121110]'
-                }`}
+                className={`py-1.5 rounded-lg transition-all ${previewTab === 'pillars'
+                  ? 'bg-[#121110] text-white shadow-2xs'
+                  : 'text-[#57534E] hover:text-[#121110]'
+                  }`}
               >
                 Pillars
               </button>
               <button
                 type="button"
                 onClick={() => setPreviewTab('sections')}
-                className={`py-1.5 rounded-lg transition-all ${
-                  previewTab === 'sections'
-                    ? 'bg-[#121110] text-white shadow-2xs'
-                    : 'text-[#57534E] hover:text-[#121110]'
-                }`}
+                className={`py-1.5 rounded-lg transition-all ${previewTab === 'sections'
+                  ? 'bg-[#121110] text-white shadow-2xs'
+                  : 'text-[#57534E] hover:text-[#121110]'
+                  }`}
               >
                 Sections
               </button>
@@ -682,20 +676,18 @@ export const ContentManager = () => {
                 <div className="space-y-4">
                   {/* Badge */}
                   <div
-                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 bg-white border rounded-md text-[9px] font-bold uppercase tracking-wider text-[#D8A7B1] transition-all ${
-                      focusedField === 'badge' ? 'ring-2 ring-rose-gold border-rose-gold bg-rose-gold/10' : 'border-[#D8D2C8]'
-                    }`}
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 bg-white border rounded-md text-[9px] font-bold uppercase tracking-wider text-[#D8A7B1] transition-all ${focusedField === 'badge' ? 'ring-2 ring-rose-gold border-rose-gold bg-rose-gold/10' : 'border-[#D8D2C8]'
+                      }`}
                   >
                     <Calendar size={10} /> {contentForm.hero.badge.en || 'EST. 2016'}
                   </div>
 
                   {/* Headline */}
                   <div
-                    className={`p-1 rounded-lg transition-all ${
-                      focusedField === 'title' || focusedField === 'highlight'
-                        ? 'bg-rose-gold/10 ring-1 ring-rose-gold'
-                        : ''
-                    }`}
+                    className={`p-1 rounded-lg transition-all ${focusedField === 'title' || focusedField === 'highlight'
+                      ? 'bg-rose-gold/10 ring-1 ring-rose-gold'
+                      : ''
+                      }`}
                   >
                     <h3 className="text-xl font-extrabold text-[#121110] font-heading leading-tight">
                       {contentForm.hero.title.en || 'Reveal Your Natural'} <br />
@@ -707,9 +699,8 @@ export const ContentManager = () => {
 
                   {/* Description */}
                   <p
-                    className={`text-xs text-[#57534E] leading-relaxed font-medium p-1 rounded-lg transition-all ${
-                      focusedField === 'description' ? 'bg-rose-gold/10 ring-1 ring-rose-gold' : ''
-                    }`}
+                    className={`text-xs text-[#57534E] leading-relaxed font-medium p-1 rounded-lg transition-all ${focusedField === 'description' ? 'bg-rose-gold/10 ring-1 ring-rose-gold' : ''
+                      }`}
                   >
                     {contentForm.hero.description.en ||
                       'Formulated with luxury botanicals and proven cosmetic actives.'}
@@ -718,17 +709,15 @@ export const ContentManager = () => {
                   {/* Action Buttons */}
                   <div className="flex flex-wrap items-center gap-2 pt-1">
                     <span
-                      className={`px-3 py-1.5 bg-[#121110] text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1 shadow-2xs ${
-                        focusedField === 'ctaPrimary' ? 'ring-2 ring-rose-gold' : ''
-                      }`}
+                      className={`px-3 py-1.5 bg-[#121110] text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1 shadow-2xs ${focusedField === 'ctaPrimary' ? 'ring-2 ring-rose-gold' : ''
+                        }`}
                     >
                       {contentForm.hero.ctaPrimary.en || 'Explore Formulations'}
                       <ArrowRight size={10} />
                     </span>
                     <span
-                      className={`px-3 py-1.5 bg-white border border-[#D8D2C8] text-[#121110] text-[10px] font-bold uppercase tracking-wider rounded-full shadow-2xs ${
-                        focusedField === 'ctaSecondary' ? 'ring-2 ring-rose-gold border-rose-gold' : ''
-                      }`}
+                      className={`px-3 py-1.5 bg-white border border-[#D8D2C8] text-[#121110] text-[10px] font-bold uppercase tracking-wider rounded-full shadow-2xs ${focusedField === 'ctaSecondary' ? 'ring-2 ring-rose-gold border-rose-gold' : ''
+                        }`}
                     >
                       {contentForm.hero.ctaSecondary.en || 'B2B Trade Inquiries'}
                     </span>
@@ -740,9 +729,8 @@ export const ContentManager = () => {
               {previewTab === 'vision' && (
                 <div className="space-y-3">
                   <div
-                    className={`p-3.5 bg-white border rounded-2xl space-y-1.5 transition-all ${
-                      focusedField === 'vision' ? 'border-rose-gold ring-1 ring-rose-gold bg-rose-gold/5' : 'border-[#D8D2C8]'
-                    }`}
+                    className={`p-3.5 bg-white border rounded-2xl space-y-1.5 transition-all ${focusedField === 'vision' ? 'border-rose-gold ring-1 ring-rose-gold bg-rose-gold/5' : 'border-[#D8D2C8]'
+                      }`}
                   >
                     <div className="flex items-center gap-1.5 text-[#D8A7B1] text-xs font-bold uppercase">
                       <Target size={14} /> Corporate Vision
@@ -753,9 +741,8 @@ export const ContentManager = () => {
                   </div>
 
                   <div
-                    className={`p-3.5 bg-white border rounded-2xl space-y-1.5 transition-all ${
-                      focusedField === 'mission' ? 'border-rose-gold ring-1 ring-rose-gold bg-rose-gold/5' : 'border-[#D8D2C8]'
-                    }`}
+                    className={`p-3.5 bg-white border rounded-2xl space-y-1.5 transition-all ${focusedField === 'mission' ? 'border-rose-gold ring-1 ring-rose-gold bg-rose-gold/5' : 'border-[#D8D2C8]'
+                      }`}
                   >
                     <div className="flex items-center gap-1.5 text-[#D8A7B1] text-xs font-bold uppercase">
                       <Compass size={14} /> Corporate Mission
@@ -773,9 +760,8 @@ export const ContentManager = () => {
                   {contentForm.values.map((val: any, idx: number) => (
                     <div
                       key={idx}
-                      className={`p-3 bg-white border rounded-xl text-center space-y-1 transition-all ${
-                        focusedField === `pillar_${idx}` ? 'border-rose-gold ring-1 ring-rose-gold bg-rose-gold/5' : 'border-[#D8D2C8]'
-                      }`}
+                      className={`p-3 bg-white border rounded-xl text-center space-y-1 transition-all ${focusedField === `pillar_${idx}` ? 'border-rose-gold ring-1 ring-rose-gold bg-rose-gold/5' : 'border-[#D8D2C8]'
+                        }`}
                     >
                       <Sparkles size={16} className="text-rose-gold mx-auto" />
                       <h5 className="text-[11px] font-bold text-[#121110] uppercase">
@@ -802,11 +788,10 @@ export const ContentManager = () => {
                     >
                       <span className="font-bold text-[#121110]">{sec.name}</span>
                       <span
-                        className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
-                          sec.visible
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-stone-200 text-stone-600'
-                        }`}
+                        className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full ${sec.visible
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-stone-200 text-stone-600'
+                          }`}
                       >
                         {sec.visible ? 'Visible' : 'Hidden'}
                       </span>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Mail,
   X,
   Award,
   Loader2,
@@ -96,11 +95,10 @@ export const InquiryManager = () => {
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-colors ${
-                statusFilter === st
+              className={`px-3 py-1 rounded-xl text-[11px] font-bold transition-colors ${statusFilter === st
                   ? 'bg-[#121110] text-white'
                   : 'text-[#57534E] hover:text-[#121110]'
-              }`}
+                }`}
             >
               {st}
             </button>
@@ -167,17 +165,16 @@ export const InquiryManager = () => {
                       </td>
                       <td className="p-4 text-center">
                         <span
-                          className={`px-3 py-1 rounded-full font-bold uppercase text-[10px] tracking-wider inline-block ${
-                            inq.status === 'New'
+                          className={`px-3 py-1 rounded-full font-bold uppercase text-[10px] tracking-wider inline-block ${inq.status === 'New'
                               ? 'bg-rose-50 text-rose-700 border border-rose-200'
                               : inq.status === 'Contacted'
-                              ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                              : inq.status === 'Qualified'
-                              ? 'bg-blue-50 text-blue-800 border border-blue-200'
-                              : inq.status === 'Converted'
-                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                              : 'bg-stone-100 text-stone-700 border border-stone-200'
-                          }`}
+                                ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                                : inq.status === 'Qualified'
+                                  ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                                  : inq.status === 'Converted'
+                                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                    : 'bg-stone-100 text-stone-700 border border-stone-200'
+                            }`}
                         >
                           {inq.status || 'New'}
                         </span>

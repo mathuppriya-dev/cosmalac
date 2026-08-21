@@ -11,7 +11,6 @@ import {
   ChevronRight,
   Search,
   ExternalLink,
-  Menu,
   FileText,
   Image as ImageIcon,
   Command as CommandIcon
@@ -75,15 +74,14 @@ export const AdminLayout = () => {
       <CommandPalette
         isOpen={commandPaletteOpen}
         onClose={() => setCommandPaletteOpen(false)}
-        onToggleTheme={() => {}}
+        onToggleTheme={() => { }}
         isDarkMode={false}
       />
 
       {/* Desktop Collapsible Sidebar */}
       <aside
-        className={`hidden md:flex flex-col justify-between transition-all duration-300 ease-in-out border-r z-30 sticky top-0 h-screen bg-white border-[#D8D2C8] shadow-xs ${
-          collapsed ? 'w-20' : 'w-64'
-        }`}
+        className={`hidden md:flex flex-col justify-between transition-all duration-300 ease-in-out border-r z-30 sticky top-0 h-screen bg-white border-[#D8D2C8] shadow-xs ${collapsed ? 'w-20' : 'w-64'
+          }`}
       >
         {/* Top Header & Navigation */}
         <div className="p-4 space-y-6">
@@ -132,18 +130,16 @@ export const AdminLayout = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-xs font-bold tracking-wide transition-all duration-150 group relative ${
-                    isActive
+                  className={`flex items-center gap-3.5 px-3.5 py-3 rounded-2xl text-xs font-bold tracking-wide transition-all duration-150 group relative ${isActive
                       ? 'bg-[#121110] text-white shadow-sm'
                       : 'text-[#57534E] hover:bg-[#EBE7DC]/60 hover:text-[#121110]'
-                  } ${collapsed ? 'justify-center px-0' : ''}`}
+                    } ${collapsed ? 'justify-center px-0' : ''}`}
                   title={collapsed ? item.name : undefined}
                 >
                   <Icon
                     size={18}
-                    className={`shrink-0 transition-transform group-hover:scale-110 ${
-                      isActive ? 'text-rose-gold' : 'text-[#121110]'
-                    }`}
+                    className={`shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-rose-gold' : 'text-[#121110]'
+                      }`}
                   />
 
                   {!collapsed && (
@@ -155,11 +151,10 @@ export const AdminLayout = () => {
                       <span>{item.name}</span>
                       {item.badge && (
                         <span
-                          className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded-full ${
-                            isActive
+                          className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded-full ${isActive
                               ? 'bg-rose-gold text-white'
                               : 'bg-rose-gold/15 text-rose-gold'
-                          }`}
+                            }`}
                         >
                           {item.badge}
                         </span>
@@ -199,9 +194,8 @@ export const AdminLayout = () => {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors ${
-              collapsed ? 'justify-center' : ''
-            }`}
+            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors ${collapsed ? 'justify-center' : ''
+              }`}
             title="Log Out Session"
           >
             <LogOut size={16} className="shrink-0" />

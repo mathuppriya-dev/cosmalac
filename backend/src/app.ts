@@ -43,12 +43,16 @@ const allowedOrigins = [
   process.env.ADMIN_URL?.replace(/\/$/, '')
 ].filter(Boolean) as string[];
 
+// Scoped pattern for official COSMALAC Vercel branch/preview deployments
+const COSMALAC_VERCEL_REGEX = /^https:\/\/cosmalac(-[a-z0-9-]+)?\.vercel\.app$/i;
+
 app.use(cors({
   origin: (origin, callback) => {
     if (
       !origin ||
       allowedOrigins.includes(origin) ||
-      origin.startsWith('http://localhost:')
+      origin.startsWith('http://localhost:') ||
+      COSMALAC_VERCEL_REGEX.test(origin)
     ) {
       callback(null, true);
     } else {
