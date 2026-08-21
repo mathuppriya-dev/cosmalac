@@ -1,6 +1,6 @@
 import User, { IUser } from '../models/User';
 import Product, { IProduct } from '../models/Product';
-import { Category, Ingredient, Inquiry, Blog, Testimonial, FAQ, SiteSettings } from '../models/OtherModels';
+import { Category, Ingredient, Inquiry, Blog, Testimonial, FAQ, SiteSettings, CmsContent } from '../models/OtherModels';
 import { isMockDB, readMockData, writeMockData } from '../config/db';
 
 // Helper to generate IDs for local JSON database
@@ -478,5 +478,90 @@ export const dbService = {
     }
     await settings.save();
     return settings.toObject();
+  },
+
+  // ================= CMS CONTENT (VISION, MISSION, VALUES, HERO, SECTIONS) =================
+  async getCmsContent(): Promise<any> {
+    const defaultContent = {
+      vision: {
+        en: 'To become a global benchmark for clean, scientific skin brightening, proving that high-end beauty and clinical safety can coexist seamlessly.'
+      },
+      mission: {
+        en: 'To formulate luxurious, skin-friendly beauty solutions that restore natural confidence, combining enriching botanical care with targeted cosmetic performance.'
+      },
+      values: [
+        {
+          id: 'val_1',
+          title: { en: 'Since 2016' },
+          description: { en: 'Over 9 Years of Skincare Trust' }
+        },
+        {
+          id: 'val_2',
+          title: { en: 'Targeted Radiance' },
+          description: { en: 'Visible Clarity & Tone Balance' }
+        },
+        {
+          id: 'val_3',
+          title: { en: 'Barrier Comfort' },
+          description: { en: 'Rich Botanical Night Lipids' }
+        },
+        {
+          id: 'val_4',
+          title: { en: 'B2B Verified' },
+          description: { en: 'Wholesale Distributor Network' }
+        }
+      ],
+      hero: {
+        badge: { en: 'EST. 2016' },
+        title: { en: 'Reveal Your Natural' },
+        highlight: { en: 'Radiance' },
+        description: {
+          en: 'Formulated with luxury botanicals and proven cosmetic actives for visible clarity and effortless skin harmony.'
+        },
+        ctaPrimary: { en: 'Explore Formulations' },
+        ctaSecondary: { en: 'B2B Trade Inquiries' }
+      },
+      sections: [
+        { id: 'hero', name: 'Hero Showcase', visible: true, order: 1 },
+        { id: 'philosophy', name: 'Brand Philosophy', visible: true, order: 2 },
+        { id: 'catalog', name: 'Featured Formulations', visible: true, order: 3 },
+        { id: 'values', name: 'Brand Values & Commitment', visible: true, order: 4 },
+        { id: 'b2b', name: 'B2B Trade & Wholesale', visible: true, order: 5 },
+        { id: 'contact', name: 'Contact & Inquiries', visible: true, order: 6 }
+      ]
+    };
+
+    if (isMockDB) {
+      const data = readMockData();
+      if (!data.content) {
+        data.content = defaultContent;
+        writeMockData(data);
+      }
+      return data.content;
+    }
+    let content = await CmsContent.findOne().lean();
+    if (!content) {
+      const newContent = new CmsContent(defaultContent);
+      await newContent.save();
+      return newContent.toObject();
+    }
+    return { ...content, id: content._id.toString() };
+  },
+
+  async updateCmsContent(contentData: any): Promise<any> {
+    if (isMockDB) {
+      const data = readMockData();
+      data.content = { ...data.content, ...contentData };
+      writeMockData(data);
+      return data.content;
+    }
+    let content = await CmsContent.findOne();
+    if (!content) {
+      content = new CmsContent(contentData);
+    } else {
+      Object.assign(content, contentData);
+    }
+    await content.save();
+    return content.toObject();
   }
 };
