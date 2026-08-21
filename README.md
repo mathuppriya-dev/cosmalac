@@ -1,103 +1,207 @@
-# COSMALAC Premium Skincare B2B + B2C Platform
+# COSMALAC Premium Skincare — Enterprise Platform & CMS
 
-An enterprise-grade, high-end digital showcase and trade platform for **COSMALAC** (Established 2016). Built using a MERN stack utilizing React (Vite) + Express + MongoDB Atlas + Mongoose, styled with **Tailwind CSS v4** matching a pink-based premium luxury palette, and animated with Framer Motion.
-
----
-
-## Architecture & Features
-
-### 🌐 Public Website
-* **Home**: Hero parallax section, trust row highlights, brand legacy, featured range, doctor endorsements, newsletter form, and accordion FAQs.
-* **Products Catalog**: Multi-category filter grid (Creams, Serums, Cleansers, Toners), sorting drop-down, and live typing search query.
-* **Product Details**: Multi-molecular ingredients glossary, instructions, storage and packaging specifications, and a dynamic "Inquire About Formulation" CTA.
-* **About Company**: Founded in 2016. Mission, vision, core values, founders' commitment, and chronological journey timeline.
-* **Quality & R&D**: Sterilization cleanrooms, HPLC chromatography source checking, safety patch testing, and GMP/ISO certifications.
-* **Science Blog**: Rich HTML publications detailing ingredient chemistry and dermatologist routine guidelines.
-* **Contact Portal**: Basic contact lines, vector map placeholder, and dual forms mapping consumer questions and wholesale B2B distributor applications.
-
-### 👨💼 Admin CMS Dashboard
-* **Secure Gateway**: Authorized JWT authentication with access/refresh token rotation.
-* **Dashboard Stats**: Summary of products, inquiries, B2B leads, blog counters, and a line chart of daily inquiry inflow logs.
-* **Product Manager**: Full CRUD manager for formulations, ingredients, and categories.
-* **Inquiry Manager**: Review leads, mark progress statuses, and save private follow-up trade notes.
-* **Blog Editor**: Publish or edit HTML blog posts.
-* **Site Config Manager**: Edit site emails, phones, address, and social link handles.
+An enterprise-grade, luxury digital showcase, wholesale trade pipeline, and standalone Control Center for **COSMALAC** (Established 2016).
 
 ---
 
-## Tech Stack & Core Enhancements
-* **Frontend**: React + TypeScript + Vite + Tailwind CSS v4 + Framer Motion.
-* **Data Fetching**: TanStack Query (React Query) for caching and background sync, coupled with Axios Interceptors for token rotation.
-* **Backend**: Node.js + Express + TypeScript API server.
-* **Security & Audits**: Helmet headers, Express rate limits, JWT access tokens (15m) + HttpOnly cookies refresh tokens (7d), password hashing using `bcryptjs`, and Zod validators.
-* **Storage**: Integrated Cloudinary uploads with local development filesystem fallbacks.
-* **Database**: MongoDB Atlas or local MongoDB using Mongoose, with a transparent local JSON file fallback (`mock_db.json`) if MongoDB is offline.
-* **Logger**: Winston logging error and activity logs to standard files.
-* **API Docs**: OpenAPI JSDoc served interactively via Swagger UI under `/api/docs`.
+## 🏛️ System Architecture
 
----
+This repository is structured as a decoupled monorepo containing two completely independent React/Vite frontends and one Express REST API backend:
 
-## Quick Start Setup
-
-### 1. Sourcing Mockup Images
-We have generated premium studio skincare mockups (Glow Cream Jar, Dropper Serum, Lab formulation). Copy these assets into the frontend public directory by running the helper script:
-```bash
-python copy_assets.py
+```text
+                                monorepo/
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         │                         │                         │
+         ▼                         ▼                         ▼
+   [ frontend/ ]               [ admin/ ]               [ backend/ ]
+   Public Storefront         Admin Control Center         Node/Express API
+   Port: 5173                Port: 5174                 Port: 5000
+   URL: cosmalac.com         URL: admin.cosmalac.com    URL: api.cosmalac.com
+   (Zero admin knowledge)    (One-way link to public)   (Multi-origin CORS)
 ```
 
-### 2. Environment Configurations
-Create a `.env` file under the `/backend` directory:
-```env
-PORT=5000
-NODE_ENV=development
-<<<<<<< HEAD
-MONGO_URI=mongodb://localhost:27017/cosmalac   # Set to 'mock' to use local mock_db.json instead
-JWT_SECRET=your_jwt_access_secret_key
-JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
-=======
-MONGO_URI=your_mongodb_connection_string  # Set to 'mock' to use local mock_db.json instead!
-JWT_SECRET=your_jwt_secret
-JWT_REFRESH_SECRET=your_refresh_token_secret
->>>>>>> 0e140023a3095c8b97a56b111cd154dbbcca7859
-EMAIL_PROVIDER=mock                            # SMTP/SendGrid options available
-```
+### Key Security & Isolation Highlights
+1. **One-Directional Relationship**: The Admin Control Center can reference the public site via `VITE_PUBLIC_STORE_URL`, but the public storefront contains **zero** admin routes, zero admin dependencies, and zero knowledge of the admin panel.
+2. **Passwordless Email OTP Authentication**: 6-digit one-time passcodes with a 10-minute expiry window, 5-attempt rate-limiting, and automatic dispatch via **Resend** (or console logging in local mock mode).
+3. **Multi-Origin CORS Protection**: Backend explicitly isolates and verifies requests originating from `http://localhost:5173`, `http://localhost:5174`, `cosmalac.com`, and `admin.cosmalac.com`.
+4. **No-Index Admin Panel**: Built-in `<meta name="robots" content="noindex, nofollow" />` ensuring search engines cannot index the management gateway.
 
-### 3. Installation & Run
-From the root workspace directory, run:
+---
+
+## 🚀 Quick Start (Local Development)
+
+### 1. Prerequisites
+- Node.js (v18 or higher)
+- npm (v9 or higher)
+
+### 2. Install All Dependencies
+From the repository root:
 ```bash
-# Install dependencies for both frontend and backend
 npm run install-all
+```
+*(This automatically installs dependencies across `backend/`, `frontend/`, and `admin/`)*
 
-# Seed database with products and default admin accounts
-npm run seed --prefix backend
-
-# Start development servers (frontend on http://localhost:5173, backend on 5000)
+### 3. Run Everything Together
+```bash
 npm run dev
 ```
+This starts all 3 services concurrently:
+- **Public Storefront**: [http://localhost:5173](http://localhost:5173)
+- **Admin Control Center**: [http://localhost:5174](http://localhost:5174)
+- **Backend API**: [http://localhost:5000](http://localhost:5000)
 
-### 4. Default Seeded Admin Credentials
-<<<<<<< HEAD
-Seeded admin credentials can be customized in the seeder script at `backend/src/scripts/seed.ts` before seeding:
-* **Super Admin**: `your_custom_email@example.com` / `your_custom_password`
-* **Editor**: `editor@cosmalac.com` / `CosmalacEditor2026!`
-* **Viewer**: `viewer@cosmalac.com` / `CosmalacViewer2026!`
-=======
-Use the credentials below to log in to the admin panel at `/admin/login`:
-Default admin accounts are created through the seed script.
-Update the credentials according to your local development environment.
->>>>>>> 0e140023a3095c8b97a56b111cd154dbbcca7859
+*(You can also run them in separate terminal tabs with `npm run dev:backend`, `npm run dev:frontend`, and `npm run dev:admin`)*
 
-### 5. Accessing Swagger API Documentation
-Open your browser and navigate to:
+---
+
+## 🔑 Development vs. Production Modes
+
+| Feature | Local Development Mode (Default) | Production Cloud Mode |
+| :--- | :--- | :--- |
+| **Database** | Seamless fallback to `mock_db.json` when `MONGO_URI=mock` | MongoDB Atlas Cluster |
+| **Email (OTP & Inquiries)** | Console logging (Winston terminal logs) | **Resend API** (`RESEND_API_KEY`) |
+| **Image Storage** | Local `/uploads` directory | **Cloudinary CDN** |
+| **Admin Authentication** | 6-digit code logged in backend terminal | 6-digit code delivered to admin inbox |
+
+> [!TIP]
+> In local development, when you enter `admin@cosmalac.com` in the admin login, look at your **backend terminal window** to copy the generated 6-digit passcode.
+
+---
+
+## 📋 Production Handover & Deployment Guide
+
+Follow these sequential steps to connect your company's production cloud services and deploy:
+
+### Step 1: Set Up MongoDB Atlas (Company Database)
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and create a free or dedicated cluster.
+2. Under **Database Access**, create a user with read/write permissions (e.g. `cosmalac_admin`).
+3. Under **Network Access**, add IP address `0.0.0.0/0` (allow all incoming cloud connections from Railway).
+4. Click **Connect** → **Drivers** (Node.js) and copy your connection string:
+   ```text
+   mongodb+srv://cosmalac_admin:<PASSWORD>@cluster0.abcde.mongodb.net/cosmalac?retryWrites=true&w=majority
+   ```
+
+---
+
+### Step 2: Set Up Resend (Company Email & OTP Service)
+1. Sign up at [Resend](https://resend.com).
+2. Go to **API Keys** → Create an API key with sending permissions.
+3. Under **Domains**, add `cosmalac.com` and copy the DNS records (TXT, MX, DKIM) into your domain registrar (Namecheap, GoDaddy, Cloudflare).
+4. Once verified, set your sender email to `security@cosmalac.com` or `admin@cosmalac.com`.
+
+---
+
+### Step 3: Set Up Cloudinary (Product & Media Storage)
+1. Sign up at [Cloudinary](https://cloudinary.com).
+2. From the Dashboard, copy your **Cloud Name**, **API Key**, and **API Secret**.
+
+---
+
+### Step 4: Deploy the Backend API (Railway)
+1. Sign in to [Railway.app](https://railway.app).
+2. Click **New Project** → **Deploy from GitHub repo** → Select the `Cosmalac` repository.
+3. In Project Settings, set the **Root Directory** to `backend`.
+4. Add the following **Environment Variables** in Railway:
+   ```env
+   NODE_ENV=production
+   PORT=5000
+   MONGO_URI=mongodb+srv://cosmalac_admin:<PASSWORD>@cluster0.abcde.mongodb.net/cosmalac?retryWrites=true&w=majority
+   FRONTEND_URL=https://cosmalac.com
+   ADMIN_URL=https://admin.cosmalac.com
+   JWT_SECRET=your_long_random_jwt_secret_key_here
+   JWT_REFRESH_SECRET=your_long_random_refresh_secret_key_here
+   RESEND_API_KEY=re_123456789abcdef
+   RESEND_FROM_EMAIL=Cosmalac Security <security@cosmalac.com>
+   ADMIN_EMAIL=admin@cosmalac.com
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   ```
+5. Under Settings → **Custom Domains**, attach `api.cosmalac.com`.
+
+---
+
+### Step 5: Deploy the Public Website (Vercel Project #1)
+1. Go to [Vercel](https://vercel.com) → Click **Add New Project** → Import `Cosmalac` repository.
+2. Name the project: `cosmalac-public`.
+3. Set **Root Directory**: `frontend`.
+4. Framework Preset: `Vite`.
+5. Add **Environment Variable**:
+   ```env
+   VITE_API_URL=https://api.cosmalac.com/api
+   ```
+6. Click **Deploy**.
+7. In Project Settings → **Domains**, add `cosmalac.com` and `www.cosmalac.com`.
+
+---
+
+### Step 6: Deploy the Admin Control Center (Vercel Project #2)
+1. In Vercel, click **Add New Project** → Import the **same** `Cosmalac` repository again.
+2. Name the project: `cosmalac-admin`.
+3. Set **Root Directory**: `admin`.
+4. Framework Preset: `Vite`.
+5. Add **Environment Variables**:
+   ```env
+   VITE_API_URL=https://api.cosmalac.com/api
+   VITE_PUBLIC_STORE_URL=https://cosmalac.com
+   ```
+6. Click **Deploy**.
+7. In Project Settings → **Domains**, add `admin.cosmalac.com`.
+
+---
+
+## 🌐 Production DNS Configuration Reference
+
+Add these records to your domain provider (Cloudflare / Namecheap / GoDaddy):
+
+| Type | Host / Name | Value / Target | Purpose |
+| :--- | :--- | :--- | :--- |
+| **A** or **CNAME** | `@` | `76.76.21.21` (or `cname.vercel-dns.com`) | Public Storefront (`cosmalac.com`) |
+| **CNAME** | `www` | `cname.vercel-dns.com` | Public Storefront (`www.cosmalac.com`) |
+| **CNAME** | `admin` | `cname.vercel-dns.com` | Standalone Admin (`admin.cosmalac.com`) |
+| **CNAME** | `api` | `your-railway-subdomain.up.railway.app` | Backend API (`api.cosmalac.com`) |
+
+---
+
+## 📁 Repository Structure
+
 ```text
-http://localhost:5000/api/docs
+Cosmalac/
+├── admin/                    # Standalone Admin Vite application (Port 5174)
+│   ├── src/
+│   │   ├── features/admin/   # Dashboard, CMS Content, Products, Media, Inquiries, Settings
+│   │   ├── lib/              # Dedicated Axios & React Query instances
+│   │   ├── styles/           # Luxury theme & glassmorphism tokens
+│   │   ├── App.tsx           # Admin router (/login, /dashboard, /content, etc.)
+│   │   └── main.tsx
+│   ├── .env.local            # VITE_API_URL & VITE_PUBLIC_STORE_URL
+│   ├── index.html            # noindex meta tags
+│   └── vite.config.ts        # Port 5174 + API proxy
+│
+├── frontend/                 # Standalone Public Storefront (Port 5173)
+│   ├── src/
+│   │   ├── components/       # Navbar, Footer, ScrollProgress, ProductCard
+│   │   ├── features/         # Home, Products, ProductDetails, B2BTrade, Contact
+│   │   ├── pages/            # About, FAQ, Privacy, Terms, NotFound
+│   │   ├── App.tsx           # Pure customer routing (Zero admin code)
+│   │   └── main.tsx
+│   ├── .env.local            # VITE_API_URL
+│   └── vite.config.ts        # Port 5173
+│
+├── backend/                  # Node.js / Express API server (Port 5000)
+│   ├── src/
+│   │   ├── controllers/      # authController (OTP + JWT), productController, cmsController
+│   │   ├── services/         # emailService (Resend + Mock), dbService (Mongo + Mock fallback)
+│   │   ├── middlewares/      # auth (JWT verification), rateLimiter, validate
+│   │   ├── models/           # Mongoose schemas for Products, Inquiries, Settings, Users
+│   │   └── server.ts
+│   └── .env                  # Backend credentials & secrets (Never commit to git)
+│
+└── package.json              # Monorepo management & concurrent dev scripts
 ```
 
 ---
 
-## Production Deployment using Docker
-You can spin up the MongoDB database, Express API server, and Nginx frontend in containerized environments:
-```bash
-docker-compose up --build
-```
-The application will run on port `80` (Frontend) and `5000` (Backend).
+## 🛡️ Support & Maintenance
+For technical inquiries or updates to brand assets, update settings via the live Control Center at `https://admin.cosmalac.com` or consult the API documentation at `https://api.cosmalac.com/api/docs`.
