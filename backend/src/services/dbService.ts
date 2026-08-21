@@ -1,6 +1,18 @@
 import User, { IUser } from '../models/User';
 import Product, { IProduct } from '../models/Product';
-import { Inquiry, FAQ, SiteSettings, CmsContent, MediaItem } from '../models/OtherModels';
+
+import {
+  Category,
+  Ingredient,
+  Inquiry,
+  Blog,
+  Testimonial,
+  FAQ,
+  SiteSettings,
+  CmsContent,
+  MediaItem
+} from '../models/OtherModels';
+
 import { isMockDB, readMockData, writeMockData } from '../config/db';
 
 // Helper to generate IDs for local JSON database
@@ -54,15 +66,15 @@ export const dbService = {
       }
       if (filter.search) {
         const s = filter.search.toLowerCase();
-        list = list.filter((p: any) => 
-          p.title?.toLowerCase().includes(s) || 
+        list = list.filter((p: any) =>
+          p.title?.toLowerCase().includes(s) ||
           p.description?.toLowerCase().includes(s) ||
           (p.ingredients && Array.isArray(p.ingredients) && p.ingredients.some((ing: string) => ing.toLowerCase().includes(s)))
         );
       }
       return list;
     }
-    
+
     const query: any = {};
     if (filter.status) {
       query.status = filter.status;
@@ -93,8 +105,8 @@ export const dbService = {
     if (isMockDB) {
       const data = readMockData();
       const clean = id.toLowerCase().trim();
-      return (data.products || []).find((p: any) => 
-        (p.id && p.id.toLowerCase() === clean) || 
+      return (data.products || []).find((p: any) =>
+        (p.id && p.id.toLowerCase() === clean) ||
         (p.slug && p.slug.toLowerCase() === clean) ||
         (p.title && p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === clean)
       );
@@ -102,7 +114,7 @@ export const dbService = {
     try {
       const item = await Product.findById(id).lean();
       if (item) return { ...item, id: item._id.toString() };
-    } catch (e) {}
+    } catch (e) { }
     const bySlug = await Product.findOne({ $or: [{ slug: id }, { slug: id.toLowerCase() }] }).lean();
     return bySlug ? { ...bySlug, id: bySlug._id.toString() } : null;
   },
@@ -111,8 +123,8 @@ export const dbService = {
     if (isMockDB) {
       const data = readMockData();
       const clean = slug.toLowerCase().trim();
-      return (data.products || []).find((p: any) => 
-        (p.slug && p.slug.toLowerCase() === clean) || 
+      return (data.products || []).find((p: any) =>
+        (p.slug && p.slug.toLowerCase() === clean) ||
         (p.id && p.id.toLowerCase() === clean) ||
         (p.title && p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === clean)
       );
@@ -151,9 +163,9 @@ export const dbService = {
       const data = readMockData();
       const idx = data.products.findIndex((p: any) => p.id === id);
       if (idx === -1) return null;
-      
+
       const slug = productData.title ? productData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : data.products[idx].slug;
-      
+
       data.products[idx] = {
         ...data.products[idx],
         ...productData,
