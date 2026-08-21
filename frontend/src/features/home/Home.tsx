@@ -185,7 +185,7 @@ export const Home = () => {
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="max-w-lg lg:max-w-md xl:max-w-xl space-y-6 text-[#121110] text-left"
+                className="max-w-lg lg:max-w-md xl:max-w-xl space-y-6 text-[#121110] text-left bg-white/70 backdrop-blur-sm p-6 sm:p-8 rounded-3xl border border-[#D8D2C8]/70 lg:bg-transparent lg:border-transparent lg:backdrop-blur-none lg:p-0 shadow-sm lg:shadow-none"
               >
                 {/* Est Badge */}
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-[#D8D2C8] rounded-md shadow-2xs text-[11px] font-bold uppercase tracking-wider text-[#D8A7B1]">
